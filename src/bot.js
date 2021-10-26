@@ -16,10 +16,6 @@ const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const commands = [
     {
-        name: "ping",
-        description: "Replies with Pong !"
-    },
-    {
         name: "emplois_sid",
         description: "Emplois du temps SID"
     },
@@ -54,10 +50,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         return;
     }
     const { commandName } = interaction;
-    if (commandName === "ping") {
-        yield interaction.reply("Pong !");
-    }
-    else if (commandName === "emplois_sid") {
+    if (commandName === "emplois_sid") {
         const attachment = new MessageAttachment(process.env.EMPLOIS_SID, 'emplois_sid.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps SID")
@@ -84,11 +77,6 @@ client.on("messageCreate", (message) => {
         return;
     }
     console.log(`${message.author.tag} in ${message.channel} : ${message.content}`);
-    if (message.content.toLowerCase() === "hello") {
-        message.channel.send("Hi !")
-            .then(message => console.log(`Sent message: ${message.content}`))
-            .catch(console.error);
-    }
 });
 // Login to Discord with the token
 client.login(process.env.DISCORDJS_BOT_TOKEN);

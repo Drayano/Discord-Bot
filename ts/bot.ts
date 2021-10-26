@@ -10,10 +10,6 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 
 const commands = [
     {
-        name: "ping",
-        description: "Replies with Pong !"
-    },
-    {
         name: "emplois_sid",
         description: "Emplois du temps SID"
     },
@@ -61,11 +57,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 
     const { commandName } = interaction;
 
-    if (commandName === "ping") {
-        await interaction.reply("Pong !")
-    }
-
-    else if (commandName === "emplois_sid") {
+    if (commandName === "emplois_sid") {
         const attachment = new MessageAttachment(process.env.EMPLOIS_SID, 'emplois_sid.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps SID")
@@ -99,12 +91,6 @@ client.on("messageCreate", (message: Message) => {
     }
 
     console.log(`${message.author.tag} in ${message.channel} : ${message.content}`);
-    
-    if (message.content.toLowerCase() === "hello") {
-        message.channel.send("Hi !")
-        .then(message => console.log(`Sent message: ${message.content}`))
-        .catch(console.error);
-    }
 });
 
 // Login to Discord with the token
