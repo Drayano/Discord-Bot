@@ -38,7 +38,10 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORDJS_BOT_TOKEN
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('Started refreshing application (/) commands.');
-        yield rest.put(Routes.applicationGuildCommands(client_id, guild_id), { body: commands });
+        yield rest.put(
+        // This is for testing purposes
+        // Routes.applicationGuildCommands(client_id, guild_id),
+        Routes.applicationGuildCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {

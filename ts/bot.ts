@@ -37,7 +37,9 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORDJS_BOT_TOKEN
 		console.log('Started refreshing application (/) commands.');
 
 		await rest.put(
-			Routes.applicationGuildCommands(client_id, guild_id),
+            // This is for testing purposes
+			// Routes.applicationGuildCommands(client_id, guild_id),
+            Routes.applicationGuildCommands(client_id),
 			{ body: commands },
 		);
 
