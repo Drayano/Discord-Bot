@@ -39,7 +39,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORDJS_BOT_TOKEN
 		await rest.put(
             // This is for testing purposes
 			// Routes.applicationGuildCommands(client_id, guild_id),
-            Routes.applicationGuildCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
