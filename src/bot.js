@@ -67,7 +67,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     else if (commandName === "drive") {
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
-            .setDescription(`Lien Mega Drive pour SID : ${process.env.MEGA_DRIVE_SID}`);
+            .setDescription(`Lien du Mega Drive - SID : ${process.env.MEGA_DRIVE_SID}`);
         yield interaction.reply({ embeds: [embed] });
     }
 }));

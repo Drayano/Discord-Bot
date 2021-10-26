@@ -78,7 +78,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     else if (commandName === "drive") {
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
-            .setDescription(`Lien Mega Drive pour SID : ${process.env.MEGA_DRIVE_SID}`);
+            .setDescription(`Lien du Mega Drive - SID : ${process.env.MEGA_DRIVE_SID}`);
 
         await interaction.reply({ embeds: [embed] });
     }
