@@ -26,6 +26,10 @@ const commands = [
     {
         name: "drive",
         description: "Drive Links"
+    },
+    {
+        name: "code",
+        description: "Bot Source Code"
     }
 ];
 const client_id = process.env.DISCORDJS_BOT_ID;
@@ -68,6 +72,12 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
             .setDescription(`Lien du Mega Drive - SID : ${process.env.MEGA_DRIVE_SID}`);
+        yield interaction.reply({ embeds: [embed] });
+    }
+    else if (commandName === "code") {
+        const embed = new MessageEmbed()
+            .setTitle("Bot Source Code")
+            .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
         yield interaction.reply({ embeds: [embed] });
     }
 }));
