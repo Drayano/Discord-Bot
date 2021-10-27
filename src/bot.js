@@ -32,9 +32,13 @@ const commands = [
         description: "Bot Source Code"
     }
 ];
+const discord_token = process.env.DISCORDJS_BOT_TOKEN;
 const client_id = process.env.DISCORDJS_BOT_ID;
 const guild_id = process.env.GUILD_ID_PLAYGROUND;
-const rest = new REST({ version: '9' }).setToken(process.env.DISCORDJS_BOT_TOKEN);
+const emplois_sid_link = process.env.EMPLOIS_SID;
+const emplois_ia_link = process.env.EMPLOIS_IA;
+const mega_link = process.env.MEGA_DRIVE_SID;
+const rest = new REST({ version: '9' }).setToken(discord_token);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('Started refreshing application (/) commands.');
@@ -58,14 +62,14 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     }
     const { commandName } = interaction;
     if (commandName === "emplois_sid") {
-        const attachment = new MessageAttachment(process.env.EMPLOIS_SID, 'emplois_sid.png');
+        const attachment = new MessageAttachment(emplois_sid_link, 'emplois_sid.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps SID")
             .setImage('attachment://emplois_sid.png');
         yield interaction.reply({ embeds: [embed], files: [attachment] });
     }
     else if (commandName === "emplois_ia") {
-        const attachment = new MessageAttachment(process.env.EMPLOIS_IA, 'emplois_ia.png');
+        const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps IA")
             .setImage('attachment://emplois_ia.png');
@@ -74,7 +78,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     else if (commandName === "drive") {
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
-            .setDescription(`Lien du Mega Drive - SID : ${process.env.MEGA_DRIVE_SID}`);
+            .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
         yield interaction.reply({ embeds: [embed] });
     }
     else if (commandName === "code") {
@@ -85,11 +89,11 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     }
 }));
 client.on("messageCreate", (message) => {
+    console.log(`${message.author.tag} in ${message.channel} in ${message.guild} : ${message.content}`);
     // Don't reply to ourselves or other bots
     if (message.author.bot) {
         return;
     }
-    console.log(`${message.author.tag} in ${message.channel} : ${message.content}`);
 });
 // Login to Discord with the token
-client.login(process.env.DISCORDJS_BOT_TOKEN);
+client.login(discord_token);
