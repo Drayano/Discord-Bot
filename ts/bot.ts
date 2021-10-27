@@ -68,7 +68,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     const { commandName } = interaction;
 
     if (commandName === "emplois_sid") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
 
         const attachment = new MessageAttachment(emplois_sid_link, 'emplois_sid.png');
         const embed = new MessageEmbed()
@@ -79,7 +85,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "emplois_ia") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
 
         const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
         const embed = new MessageEmbed()
@@ -90,7 +102,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "drive") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
 
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
@@ -100,7 +118,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "code") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
 
         const embed = new MessageEmbed()
             .setTitle("Bot Source Code")
@@ -111,8 +135,14 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 });
 
 client.on("messageCreate", (message: Message) => {
-    console.log(`${message.author.tag} in ${message.channel} in ${message.guild} : ${message.content}`);
+    if (message.channel.type === "DM") {
+        console.log(`${message.author.tag} in a Direct MEssage : ${message.content}`);
+    }
 
+    else {
+        console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
+    }
+    
     // Don't reply to ourselves or other bots
     if (message.author.bot) {
         return;

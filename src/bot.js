@@ -57,12 +57,18 @@ client.once("ready", () => {
     console.log(`${client.user.tag} has logged in`);
 });
 client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     if (!interaction.isCommand()) {
         return;
     }
     const { commandName } = interaction;
     if (commandName === "emplois_sid") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${(_a = interaction.channel) === null || _a === void 0 ? void 0 : _a.name} in ${(_b = interaction.guild) === null || _b === void 0 ? void 0 : _b.name} : used the ${commandName} command`);
+        }
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
         const attachment = new MessageAttachment(emplois_sid_link, 'emplois_sid.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps SID")
@@ -70,7 +76,12 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         yield interaction.reply({ embeds: [embed], files: [attachment] });
     }
     else if (commandName === "emplois_ia") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${(_c = interaction.channel) === null || _c === void 0 ? void 0 : _c.name} in ${(_d = interaction.guild) === null || _d === void 0 ? void 0 : _d.name} : used the ${commandName} command`);
+        }
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
         const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps IA")
@@ -78,14 +89,24 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         yield interaction.reply({ embeds: [embed], files: [attachment] });
     }
     else if (commandName === "drive") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${(_e = interaction.channel) === null || _e === void 0 ? void 0 : _e.name} in ${(_f = interaction.guild) === null || _f === void 0 ? void 0 : _f.name} : used the ${commandName} command`);
+        }
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
             .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
         yield interaction.reply({ embeds: [embed] });
     }
     else if (commandName === "code") {
-        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${(_g = interaction.channel) === null || _g === void 0 ? void 0 : _g.name} in ${(_h = interaction.guild) === null || _h === void 0 ? void 0 : _h.name} : used the ${commandName} command`);
+        }
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
         const embed = new MessageEmbed()
             .setTitle("Bot Source Code")
             .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
@@ -93,7 +114,13 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     }
 }));
 client.on("messageCreate", (message) => {
-    console.log(`${message.author.tag} in ${message.channel} in ${message.guild} : ${message.content}`);
+    var _a;
+    if (message.channel.type === "DM") {
+        console.log(`${message.author.tag} in a Direct MEssage : ${message.content}`);
+    }
+    else {
+        console.log(`${message.author.tag} in #${message.channel.name} in ${(_a = message.guild) === null || _a === void 0 ? void 0 : _a.name} : ${message.content}`);
+    }
     // Don't reply to ourselves or other bots
     if (message.author.bot) {
         return;
