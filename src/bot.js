@@ -62,6 +62,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
     }
     const { commandName } = interaction;
     if (commandName === "emplois_sid") {
+        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
         const attachment = new MessageAttachment(emplois_sid_link, 'emplois_sid.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps SID")
@@ -69,6 +70,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         yield interaction.reply({ embeds: [embed], files: [attachment] });
     }
     else if (commandName === "emplois_ia") {
+        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
         const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
         const embed = new MessageEmbed()
             .setTitle("Emplois du temps IA")
@@ -76,12 +78,14 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         yield interaction.reply({ embeds: [embed], files: [attachment] });
     }
     else if (commandName === "drive") {
+        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
         const embed = new MessageEmbed()
             .setTitle("Mega Drive")
             .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
         yield interaction.reply({ embeds: [embed] });
     }
     else if (commandName === "code") {
+        console.log(`${interaction.user.tag} in ${interaction.channel} in ${interaction.guild} : used the ${commandName} command`);
         const embed = new MessageEmbed()
             .setTitle("Bot Source Code")
             .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
