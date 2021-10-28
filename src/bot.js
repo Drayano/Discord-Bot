@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const rest_1 = require("@discordjs/rest");
 const v9_1 = require("discord-api-types/v9");
-require("dotenv").config();
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const discord_client = new discord_js_1.Client({
     intents: [
         discord_js_1.Intents.FLAGS.GUILDS,
@@ -41,6 +45,18 @@ const commands = [
     {
         name: "code",
         description: "Bot Source Code"
+    },
+    {
+        name: "spongebob",
+        description: "sPoNgE bOb cAsE",
+        options: [
+            {
+                name: "input",
+                description: "Text to transform",
+                required: true,
+                type: 3 // String
+            }
+        ]
     }
 ];
 const discord_token = process.env.DISCORDJS_BOT_TOKEN;
@@ -71,11 +87,11 @@ discord_client.once("ready", () => {
 });
 // Slash (/) commands handling
 discord_client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
     if (!interaction.isCommand()) {
         return;
     }
-    const { commandName } = interaction;
+    const { commandName, options } = interaction;
     // emplois_sid command
     if (commandName === "emplois_sid") {
         // Check if the interaction is happening in a discord server (to get channel.name)
@@ -135,6 +151,35 @@ discord_client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0
             .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
         yield interaction.reply({ embeds: [embed] });
     }
+    // spongebob command
+    else if (commandName === "spongebob") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${(_j = interaction.channel) === null || _j === void 0 ? void 0 : _j.name} in ${(_k = interaction.guild) === null || _k === void 0 ? void 0 : _k.name} : used the ${commandName} command with '${(_m = (_l = options.get("input")) === null || _l === void 0 ? void 0 : _l.value) === null || _m === void 0 ? void 0 : _m.toString()}'`);
+        }
+        // Interaction happening in a DM
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${(_p = (_o = options.get("input")) === null || _o === void 0 ? void 0 : _o.value) === null || _p === void 0 ? void 0 : _p.toString()}'`);
+        }
+        let text = "";
+        let spongebob = "";
+        if (((_r = (_q = options.get("input")) === null || _q === void 0 ? void 0 : _q.value) === null || _r === void 0 ? void 0 : _r.toString().length) !== undefined) {
+            for (let i = 0; i < ((_t = (_s = options.get("input")) === null || _s === void 0 ? void 0 : _s.value) === null || _t === void 0 ? void 0 : _t.toString().length); i++) {
+                text = (_v = (_u = options.get("input")) === null || _u === void 0 ? void 0 : _u.value) === null || _v === void 0 ? void 0 : _v.toString();
+                if (i % 2 === 0) {
+                    spongebob += text.charAt(i).toLowerCase();
+                }
+                else if (i % 2 === 1) {
+                    spongebob += text.charAt(i).toUpperCase();
+                }
+            }
+        }
+        else {
+            console.log("Error on the spongebob command, no text provided !");
+            spongebob = "No text provided";
+        }
+        yield interaction.reply(spongebob);
+    }
 }));
 // Messages handling
 discord_client.on("messageCreate", (message) => {
@@ -154,7 +199,7 @@ discord_client.on("messageCreate", (message) => {
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+            message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     // Don't reply to ourselves or other bots

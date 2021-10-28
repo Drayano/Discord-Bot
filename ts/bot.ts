@@ -1,8 +1,9 @@
 import { Client, Intents, Interaction, Message, MessageAttachment, MessageEmbed } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v9"
+import { Routes } from "discord-api-types/v9";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 
 const discord_client: Client = new Client({ 
     intents: [
@@ -21,7 +22,8 @@ const discord_client: Client = new Client({
 // List of commands
 interface CommandInterface {
     name: string,
-    description: string
+    description: string,
+    options?: { name: string, description: string, type: number, required?: boolean }[]
 }
 
 const commands: CommandInterface[] = [
@@ -40,6 +42,18 @@ const commands: CommandInterface[] = [
     {
         name: "code",
         description: "Bot Source Code"
+    },
+    {
+        name: "spongebob",
+        description: "sPoNgE bOb cAsE",
+        options: [
+            {
+                name: "input",
+                description: "Text to transform",
+                required: true,
+                type: 3 // String
+            }
+        ]
     }
 ];
 
@@ -83,7 +97,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         return;
     }
 
-    const { commandName } = interaction;
+    const { commandName, options } = interaction;
 
     // emplois_sid command
     if (commandName === "emplois_sid") {
@@ -159,6 +173,43 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 
         await interaction.reply({ embeds: [embed] });
     }
+
+    // spongebob command
+    else if (commandName === "spongebob") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
+        }
+
+        // Interaction happening in a DM
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
+        }
+
+        let text: string = "";
+        let spongebob: string = "";
+
+        if (options.get("input")?.value?.toString().length !== undefined) {
+            for (let i = 0; i < options.get("input")?.value?.toString().length!; i++) {
+                text = options.get("input")?.value?.toString()!;
+                
+                if (i % 2 === 0) {
+                    spongebob += text.charAt(i).toLowerCase();
+                }
+
+                else if (i % 2 === 1) {
+                    spongebob += text.charAt(i).toUpperCase();
+                }
+            }
+        }
+
+        else {
+            console.log("Error on the spongebob command, no text provided !");
+            spongebob = "No text provided";
+        }
+        
+        await interaction.reply(spongebob);
+    }
 });
 
 // Messages handling
@@ -181,7 +232,7 @@ discord_client.on("messageCreate", (message: Message) => {
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+            message.embeds.forEach((embed: MessageEmbed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     
