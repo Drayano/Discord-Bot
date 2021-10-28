@@ -82,8 +82,16 @@ const rest = new rest_1.REST({ version: '9' }).setToken(discord_token);
 }))();
 // When the client is ready, run this code (only once)
 discord_client.once("ready", () => {
-    var _a;
+    var _a, _b, _c;
     console.log(`${(_a = discord_client.user) === null || _a === void 0 ? void 0 : _a.tag} has logged in`);
+    (_b = discord_client.user) === null || _b === void 0 ? void 0 : _b.setPresence({
+        status: "online",
+        activities: [{
+                type: "WATCHING",
+                name: "USTO"
+            }]
+    });
+    console.log(`${(_c = discord_client.user) === null || _c === void 0 ? void 0 : _c.tag} status set to "WATCHING USTO"`);
 });
 // Slash (/) commands handling
 discord_client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {

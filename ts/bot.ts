@@ -89,6 +89,16 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 // When the client is ready, run this code (only once)
 discord_client.once("ready", () => {
 	console.log(`${discord_client.user?.tag} has logged in`);
+
+    discord_client.user?.setPresence({
+        status: "online",  // You can show online, idle....
+        activities: [{
+            type: "WATCHING",
+            name: "USTO"
+        }]
+    });
+
+    console.log(`${discord_client.user?.tag} status set to "WATCHING USTO"`);
 });
 
 // Slash (/) commands handling
