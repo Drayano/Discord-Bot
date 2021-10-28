@@ -13,7 +13,8 @@ require("dotenv").config();
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js");
-const client = new Client({ intents: [
+const client = new Client({
+    intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
@@ -22,7 +23,8 @@ const client = new Client({ intents: [
     ],
     partials: [
         "CHANNEL"
-    ] });
+    ]
+});
 // List of commands
 const commands = [
     {
@@ -141,11 +143,19 @@ client.on("messageCreate", (message) => {
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
+        // Print embeds if there are any
+        if (message.embeds.length > 0) {
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+        }
     }
     // The message is being sent in a discord server so we can get (channel.name)
     else {
         console.log(`${message.author.tag} in #${message.channel.name} in ${(_a = message.guild) === null || _a === void 0 ? void 0 : _a.name} : ${message.content}`);
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
+        // Print embeds if there are any
+        if (message.embeds.length > 0) {
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+        }
     }
     // Don't reply to ourselves or other bots
     if (message.author.bot) {
