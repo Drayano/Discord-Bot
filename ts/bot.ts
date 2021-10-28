@@ -6,7 +6,16 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
 const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js");
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Intents.FLAGS.DIRECT_MESSAGES,
+    Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+],
+partials: [
+    "CHANNEL"
+] });
 
 // List of commands
 const commands = [
@@ -146,15 +155,18 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 });
 
+// Messages handling
 client.on("messageCreate", (message: Message) => {
     // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
+        message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
     }
 
     // The message is being sent in a discord server so we can get (channel.name)
     else {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
+        message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
     }
     
     // Don't reply to ourselves or other bots
@@ -166,7 +178,6 @@ client.on("messageCreate", (message: Message) => {
 // Login to Discord with the token
 client.login(discord_token);
 
-// TODO : Fix test bot so I can use both of them at the same time (commands conflict)
 // TODO : Add Spongebob case through a command
 // TODO : Add more commands
 // TODO : Restrict some commands to relevant channels in Yugen
