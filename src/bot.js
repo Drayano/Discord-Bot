@@ -9,23 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const rest_1 = require("@discordjs/rest");
+const v9_1 = require("discord-api-types/v9");
 require("dotenv").config();
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js");
-const client = new Client({
+const discord_client = new discord_js_1.Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        discord_js_1.Intents.FLAGS.GUILDS,
+        discord_js_1.Intents.FLAGS.GUILD_MESSAGES,
+        discord_js_1.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        discord_js_1.Intents.FLAGS.DIRECT_MESSAGES,
+        discord_js_1.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
     ],
     partials: [
         "CHANNEL"
     ]
 });
-// List of commands
 const commands = [
     {
         name: "emplois_sid",
@@ -50,7 +49,7 @@ const guild_id = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link = process.env.EMPLOIS_SID;
 const emplois_ia_link = process.env.EMPLOIS_IA;
 const mega_link = process.env.MEGA_DRIVE_SID;
-const rest = new REST({ version: '9' }).setToken(discord_token);
+const rest = new rest_1.REST({ version: '9' }).setToken(discord_token);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('Started refreshing application (/) commands.');
@@ -58,7 +57,7 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
         // This is for testing purposes
         // Routes.applicationGuildCommands(client_id, guild_id),
         // This is for production
-        Routes.applicationCommands(client_id), { body: commands });
+        v9_1.Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
@@ -66,11 +65,12 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
     }
 }))();
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
-    console.log(`${client.user.tag} has logged in`);
+discord_client.once("ready", () => {
+    var _a;
+    console.log(`${(_a = discord_client.user) === null || _a === void 0 ? void 0 : _a.tag} has logged in`);
 });
 // Slash (/) commands handling
-client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
+discord_client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h;
     if (!interaction.isCommand()) {
         return;
@@ -86,8 +86,8 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
-        const attachment = new MessageAttachment(emplois_sid_link, 'emplois_sid.png');
-        const embed = new MessageEmbed()
+        const attachment = new discord_js_1.MessageAttachment(emplois_sid_link, 'emplois_sid.png');
+        const embed = new discord_js_1.MessageEmbed()
             .setTitle("Emplois du temps SID")
             .setImage('attachment://emplois_sid.png');
         yield interaction.reply({ embeds: [embed], files: [attachment] });
@@ -101,8 +101,8 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
-        const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
-        const embed = new MessageEmbed()
+        const attachment = new discord_js_1.MessageAttachment(emplois_ia_link, 'emplois_ia.png');
+        const embed = new discord_js_1.MessageEmbed()
             .setTitle("Emplois du temps IA")
             .setImage('attachment://emplois_ia.png');
         yield interaction.reply({ embeds: [embed], files: [attachment] });
@@ -116,7 +116,7 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
-        const embed = new MessageEmbed()
+        const embed = new discord_js_1.MessageEmbed()
             .setTitle("Mega Drive")
             .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
         yield interaction.reply({ embeds: [embed] });
@@ -130,14 +130,14 @@ client.on("interactionCreate", (interaction) => __awaiter(void 0, void 0, void 0
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
-        const embed = new MessageEmbed()
+        const embed = new discord_js_1.MessageEmbed()
             .setTitle("Bot Source Code")
             .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
         yield interaction.reply({ embeds: [embed] });
     }
 }));
 // Messages handling
-client.on("messageCreate", (message) => {
+discord_client.on("messageCreate", (message) => {
     var _a;
     // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
@@ -163,7 +163,7 @@ client.on("messageCreate", (message) => {
     }
 });
 // Login to Discord with the token
-client.login(discord_token);
+discord_client.login(discord_token);
 // TODO : Add Spongebob case through a command
 // TODO : Add more commands
 // TODO : Restrict some commands to relevant channels in Yugen

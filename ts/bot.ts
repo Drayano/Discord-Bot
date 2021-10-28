@@ -1,12 +1,10 @@
-import { Interaction, Message } from "discord.js";
+import { Client, Intents, Interaction, Message, MessageAttachment, MessageEmbed } from "discord.js";
+import { REST } from "@discordjs/rest";
+import { Routes } from "discord-api-types/v9"
 
 require("dotenv").config();
 
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-
-const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js");
-const client = new Client({ 
+const discord_client: Client = new Client({ 
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
@@ -21,7 +19,12 @@ const client = new Client({
 });
 
 // List of commands
-const commands = [
+interface CommandInterface {
+    name: string,
+    description: string
+}
+
+const commands: CommandInterface[] = [
     {
         name: "emplois_sid",
         description: "Emplois du temps SID"
@@ -40,14 +43,14 @@ const commands = [
     }
 ];
 
-const discord_token = process.env.DISCORDJS_BOT_TOKEN;
-const client_id = process.env.DISCORDJS_BOT_ID;
-const guild_id = process.env.GUILD_ID_PLAYGROUND;
-const emplois_sid_link = process.env.EMPLOIS_SID;
-const emplois_ia_link = process.env.EMPLOIS_IA;
-const mega_link = process.env.MEGA_DRIVE_SID;
+const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_BOT_ID;
+const guild_id: string = process.env.GUILD_ID_PLAYGROUND;
+const emplois_sid_link: string = process.env.EMPLOIS_SID;
+const emplois_ia_link: string = process.env.EMPLOIS_IA;
+const mega_link: string = process.env.MEGA_DRIVE_SID;
 
-const rest = new REST({ version: '9' }).setToken(discord_token);
+const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 (async () => {
 	try {
@@ -70,12 +73,12 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
 })();
 
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
-	console.log(`${client.user.tag} has logged in`);
+discord_client.once("ready", () => {
+	console.log(`${discord_client.user?.tag} has logged in`);
 });
 
 // Slash (/) commands handling
-client.on("interactionCreate", async (interaction: Interaction) => {
+discord_client.on("interactionCreate", async (interaction: Interaction) => {
     if (!interaction.isCommand()) {
         return;
     }
@@ -159,7 +162,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 });
 
 // Messages handling
-client.on("messageCreate", (message: Message) => {
+discord_client.on("messageCreate", (message: Message) => {
     // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
@@ -189,7 +192,7 @@ client.on("messageCreate", (message: Message) => {
 });
 
 // Login to Discord with the token
-client.login(discord_token);
+discord_client.login(discord_token);
 
 // TODO : Add Spongebob case through a command
 // TODO : Add more commands
