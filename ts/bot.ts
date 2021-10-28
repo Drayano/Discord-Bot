@@ -8,6 +8,7 @@ const { Routes } = require('discord-api-types/v9');
 const { Client, Intents, MessageAttachment, MessageEmbed } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
+// List of commands
 const commands = [
     {
         name: "emplois_sid",
@@ -43,6 +44,7 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
 		await rest.put(
             // This is for testing purposes
 			// Routes.applicationGuildCommands(client_id, guild_id),
+            // This is for production
             Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
@@ -60,6 +62,7 @@ client.once("ready", () => {
 	console.log(`${client.user.tag} has logged in`);
 });
 
+// Slash (/) commands handling
 client.on("interactionCreate", async (interaction: Interaction) => {
     if (!interaction.isCommand()) {
         return;
@@ -67,11 +70,14 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 
     const { commandName } = interaction;
 
+    // emplois_sid command
     if (commandName === "emplois_sid") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
         }
 
+        // Interaction happening in a DM
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
@@ -85,10 +91,12 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "emplois_ia") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
         }
 
+        // Interaction happening in a DM
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
@@ -102,10 +110,12 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "drive") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
         }
 
+        // Interaction happening in a DM
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
@@ -118,10 +128,12 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     }
 
     else if (commandName === "code") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
         }
 
+        // Interaction happening in a DM
         else {
             console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
         }
@@ -135,10 +147,12 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 });
 
 client.on("messageCreate", (message: Message) => {
+    // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
-        console.log(`${message.author.tag} in a Direct MEssage : ${message.content}`);
+        console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
     }
 
+    // The message is being sent in a discord server so we can get (channel.name)
     else {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
     }
@@ -152,3 +166,8 @@ client.on("messageCreate", (message: Message) => {
 // Login to Discord with the token
 client.login(discord_token);
 
+// TODO : Fix test bot so I can use both of them at the same time (commands conflict)
+// TODO : Add Spongebob case through a command
+// TODO : Add more commands
+// TODO : Restrict some commands to relevant channels in Yugen
+// TODO : No restriction in Playground
