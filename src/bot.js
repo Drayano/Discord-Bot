@@ -70,8 +70,8 @@ const commands = [
         ]
     }
 ];
-const discord_token = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token = process.env.DISCORDJS_BOT_TOKEN;
+const client_id = process.env.DISCORDJS_BOT_ID;
 const guild_id = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link = process.env.EMPLOIS_SID;
 const emplois_ia_link = process.env.EMPLOIS_IA;
@@ -82,10 +82,9 @@ const rest = new rest_1.REST({ version: '9' }).setToken(discord_token);
         console.log('Started refreshing application (/) commands.');
         await rest.put(
         // This is for testing purposes
-        v9_1.Routes.applicationGuildCommands(client_id, guild_id), 
+        // Routes.applicationGuildCommands(client_id, guild_id),
         // This is for production
-        // Routes.applicationCommands(client_id),
-        { body: commands });
+        v9_1.Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
@@ -182,6 +181,7 @@ discord_client.on("interactionCreate", async (interaction) => {
         }
         let text = "";
         let spongebob = "";
+        // Check if the input text isn't an empty string
         if (options.get("input")?.value?.toString().length !== undefined) {
             for (let i = 0; i < options.get("input")?.value?.toString().length; i++) {
                 text = options.get("input")?.value?.toString();
@@ -193,6 +193,7 @@ discord_client.on("interactionCreate", async (interaction) => {
                 }
             }
         }
+        // If the user provides an empty string show an error
         else {
             console.log("Error on the spongebob command, no text provided !");
             spongebob = "No text provided";
