@@ -170,7 +170,7 @@ discord_client.on("messageCreate", (message: Message) => {
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
 
@@ -181,7 +181,7 @@ discord_client.on("messageCreate", (message: Message) => {
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     

@@ -145,7 +145,7 @@ discord_client.on("messageCreate", (message) => {
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     // The message is being sent in a discord server so we can get (channel.name)
@@ -154,7 +154,7 @@ discord_client.on("messageCreate", (message) => {
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${embed.toJSON()}\n`));
+            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     // Don't reply to ourselves or other bots
