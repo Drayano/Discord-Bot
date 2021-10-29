@@ -81,8 +81,8 @@ const commands = [
         ]
     }
 ];
-const discord_token = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token = process.env.DISCORDJS_BOT_TOKEN;
+const client_id = process.env.DISCORDJS_BOT_ID;
 const guild_id = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link = process.env.EMPLOIS_SID;
 const emplois_ia_link = process.env.EMPLOIS_IA;
@@ -94,10 +94,9 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
         console.log('Started refreshing application (/) commands.');
         await rest.put(
         // This is for testing purposes
-        Routes.applicationGuildCommands(client_id, guild_id), 
+        // Routes.applicationGuildCommands(client_id, guild_id),
         // This is for production
-        // Routes.applicationCommands(client_id),
-        { body: commands });
+        Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {

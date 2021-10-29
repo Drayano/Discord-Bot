@@ -95,8 +95,8 @@ const commands: CommandInterface[] = [
     }
 ];
 
-const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_BOT_ID;
 const guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link: string = process.env.EMPLOIS_SID;
 const emplois_ia_link: string = process.env.EMPLOIS_IA;
@@ -111,9 +111,9 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			Routes.applicationGuildCommands(client_id, guild_id),
+			// Routes.applicationGuildCommands(client_id, guild_id),
             // This is for production
-            // Routes.applicationCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
