@@ -76,15 +76,17 @@ const guild_id = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link = process.env.EMPLOIS_SID;
 const emplois_ia_link = process.env.EMPLOIS_IA;
 const mega_link = process.env.MEGA_DRIVE_SID;
+const spongebob_gif = process.env.SPONGEBOB_GIF;
 const rest = new rest_1.REST({ version: '9' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
         await rest.put(
         // This is for testing purposes
-        // Routes.applicationGuildCommands(client_id, guild_id),
+        v9_1.Routes.applicationGuildCommands(client_id, guild_id), 
         // This is for production
-        v9_1.Routes.applicationCommands(client_id), { body: commands });
+        //Routes.applicationCommands(client_id),
+        { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
@@ -198,7 +200,10 @@ discord_client.on("interactionCreate", async (interaction) => {
             console.log("Error on the spongebob command, no text provided !");
             spongebob = "No text provided";
         }
-        await interaction.reply(spongebob);
+        const embed = new discord_js_1.MessageEmbed()
+            .setImage(spongebob_gif);
+        await interaction.reply({ embeds: [embed] });
+        await interaction.editReply(spongebob);
     }
 });
 // Messages handling

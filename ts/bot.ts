@@ -66,6 +66,7 @@ const guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link: string = process.env.EMPLOIS_SID;
 const emplois_ia_link: string = process.env.EMPLOIS_IA;
 const mega_link: string = process.env.MEGA_DRIVE_SID;
+const spongebob_gif: string = process.env.SPONGEBOB_GIF;
 
 const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
@@ -75,7 +76,7 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			// Routes.applicationGuildCommands(client_id, guild_id),
+			//Routes.applicationGuildCommands(client_id, guild_id),
             // This is for production
             Routes.applicationCommands(client_id),
 			{ body: commands },
@@ -223,8 +224,12 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
             console.log("Error on the spongebob command, no text provided !");
             spongebob = "No text provided";
         }
-        
-        await interaction.reply(spongebob);
+
+        const embed = new MessageEmbed()
+            .setImage(spongebob_gif);
+
+        await interaction.reply({ embeds: [embed]})
+        await interaction.editReply(spongebob);
     }
 });
 

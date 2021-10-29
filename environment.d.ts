@@ -10,6 +10,7 @@ declare global {
         MEGA_DRIVE_SID: string,
         EMPLOIS_SID: string,
         EMPLOIS_IA: string,
+        SPONGEBOB_GIF: string
       }
     }
   }
