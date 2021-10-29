@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 
 import * as https from 'https'; 
 
-import { command_help } from "./Commands/help";
-import { command_emplois_sid } from "./Commands/emplois_sid";
-import { command_emplois_ia } from "./Commands/emplois_ia";
-import { command_drive } from "./Commands/drive";
-import { command_code } from "./Commands/code";
-import { command_spongebob } from "./Commands/spongebob";
+import { command_help } from "./Commands/help.js";
+import { command_emplois_sid } from "./Commands/emplois_sid.js";
+import { command_emplois_ia } from "./Commands/emplois_ia.js";
+import { command_drive } from "./Commands/drive.js";
+import { command_code } from "./Commands/code.js";
+import { command_spongebob } from "./Commands/spongebob.js";
+import { command_memes } from "./Commands/memes.js";
 
 dotenv.config();
 
@@ -63,6 +64,18 @@ const commands: CommandInterface[] = [
             {
                 name: "input",
                 description: "Text to transform",
+                required: true,
+                type: 3 // String
+            }
+        ]
+    },
+    {
+        name: "memes",
+        description: "Make memes",
+        options: [
+            {
+                name: "input",
+                description: "Choose a meme template",
                 required: true,
                 type: 3 // String
             }
@@ -138,10 +151,12 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         command_emplois_ia(interaction, emplois_ia_link);
     }
 
+    // drive command
     else if (commandName === "drive") {
         command_drive(interaction, mega_link);
     }
 
+    // code command
     else if (commandName === "code") {
         command_code(interaction);
     }
@@ -150,6 +165,10 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
     else if (commandName === "spongebob") {
         command_spongebob(interaction, spongebob_gif);
     }
+
+    else if (commandName === "memes") {
+        command_memes(interaction);
+    }
 });
 
 // Messages handling
@@ -157,11 +176,11 @@ discord_client.on("messageCreate", (message: Message) => {
     // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
-        message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
+        message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach(embed => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+            message.embeds.forEach((embed: any) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
 
@@ -173,9 +192,9 @@ discord_client.on("messageCreate", (message: Message) => {
         let text = message.content;
         text = text.replace(/[^0-9\s]/g, "");
         let arr = text.split(" ");
-        arr.forEach(id => {
-            if (discord_client.users.cache.find(user => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find(user => user.id === id)?.tag}`);
+        arr.forEach((id: any) => {
+            if (discord_client.users.cache.find((user: any) => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find((user: any) => user.id === id)?.tag}`);
             }
         });
 
@@ -185,7 +204,7 @@ discord_client.on("messageCreate", (message: Message) => {
         
         let arr1 = emoji.split(" ");
 
-        arr1.forEach(id => {
+        arr1.forEach((id: any) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
                 if (statusCode === 200) { // HTTP 200 = OK
@@ -195,7 +214,7 @@ discord_client.on("messageCreate", (message: Message) => {
         });
         
         // Get Attachement files if there are any
-        message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
+        message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {

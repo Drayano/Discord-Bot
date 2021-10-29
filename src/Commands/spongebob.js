@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.command_spongebob = void 0;
-const discord_js_1 = require("discord.js");
-async function command_spongebob(interaction, spongebob_gif) {
+import { MessageAttachment } from "discord.js";
+export async function command_spongebob(interaction, spongebob_gif) {
     if (!interaction.isCommand()) {
         return;
     }
@@ -34,7 +31,6 @@ async function command_spongebob(interaction, spongebob_gif) {
         console.log("Error on the spongebob command, no text provided !");
         spongebob = "No text provided";
     }
-    const attachment = new discord_js_1.MessageAttachment(spongebob_gif, 'spongebob.gif');
+    const attachment = new MessageAttachment(spongebob_gif, 'spongebob.gif');
     await interaction.reply({ content: spongebob, files: [attachment] });
 }
-exports.command_spongebob = command_spongebob;

@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.command_drive = void 0;
-const discord_js_1 = require("discord.js");
-async function command_drive(interaction, mega_link) {
+import { MessageEmbed } from "discord.js";
+export async function command_drive(interaction, mega_link) {
     if (!interaction.isCommand()) {
         return;
     }
@@ -15,9 +12,8 @@ async function command_drive(interaction, mega_link) {
     else {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
-    const embed = new discord_js_1.MessageEmbed()
+    const embed = new MessageEmbed()
         .setTitle("Mega Drive")
         .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
     await interaction.reply({ embeds: [embed] });
 }
-exports.command_drive = command_drive;
