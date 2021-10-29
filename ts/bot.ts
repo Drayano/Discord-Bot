@@ -253,11 +253,9 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
             spongebob = "No text provided";
         }
 
-        const embed = new MessageEmbed()
-            .setImage(spongebob_gif);
+        const attachment = new MessageAttachment(spongebob_gif, 'spongebob.gif');
 
-        await interaction.reply({ embeds: [embed] })
-        await interaction.editReply(spongebob);
+        await interaction.reply({ content: spongebob, files: [attachment] });
     }
 });
 
@@ -302,7 +300,6 @@ discord_client.on("messageCreate", (message: Message) => {
                 } 
             })   
         });
-        
         
         // Get Attachement files if there are any
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));

@@ -223,10 +223,8 @@ discord_client.on("interactionCreate", async (interaction) => {
             console.log("Error on the spongebob command, no text provided !");
             spongebob = "No text provided";
         }
-        const embed = new discord_js_1.MessageEmbed()
-            .setImage(spongebob_gif);
-        await interaction.reply({ embeds: [embed] });
-        await interaction.editReply(spongebob);
+        const attachment = new discord_js_1.MessageAttachment(spongebob_gif, 'spongebob.gif');
+        await interaction.reply({ content: spongebob, files: [attachment] });
     }
 });
 // Messages handling
