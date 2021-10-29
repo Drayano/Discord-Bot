@@ -76,9 +76,9 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			Routes.applicationGuildCommands(client_id, guild_id),
+			//Routes.applicationGuildCommands(client_id, guild_id),
             // This is for production
-            //Routes.applicationCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
