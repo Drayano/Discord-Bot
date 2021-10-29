@@ -12,8 +12,10 @@ export async function command_drive(interaction, mega_link) {
     else {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
+    // Create an Embed with a Title and Description
     const embed = new MessageEmbed()
         .setTitle("Mega Drive")
         .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
+    // Reply with the Embed
     await interaction.reply({ embeds: [embed] });
 }

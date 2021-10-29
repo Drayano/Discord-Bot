@@ -17,6 +17,7 @@ export async function command_code(interaction: Interaction) {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
 
+    // Create an Embed with a Title and Description
     const embed = new MessageEmbed()
         .setTitle("Bot Source Code")
         .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);

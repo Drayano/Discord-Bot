@@ -3,7 +3,6 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dotenv from "dotenv";
 
-import * as http from "http";
 import * as https from 'https'; 
 
 import { command_help } from "./Commands/help.js";
@@ -96,8 +95,8 @@ const commands: CommandInterface[] = [
     }
 ];
 
-const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_BOT_ID;
+const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
 const guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 const emplois_sid_link: string = process.env.EMPLOIS_SID;
 const emplois_ia_link: string = process.env.EMPLOIS_IA;
@@ -112,9 +111,9 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			// Routes.applicationGuildCommands(client_id, guild_id),
+			Routes.applicationGuildCommands(client_id, guild_id),
             // This is for production
-            Routes.applicationCommands(client_id),
+            // Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
@@ -179,6 +178,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         command_spongebob(interaction, spongebob_gif);
     }
 
+    // memes command
     else if (commandName === "memes") {
         command_memes(interaction);
     }
@@ -244,6 +244,5 @@ discord_client.on("messageCreate", (message: Message) => {
 // Login to Discord with the token
 discord_client.login(discord_token);
 
-// TODO : Add more commands
 // TODO : Restrict some commands to relevant channels in Yugen
 // TODO : No restriction in Playground

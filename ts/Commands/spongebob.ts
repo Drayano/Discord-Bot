@@ -41,7 +41,9 @@ export async function command_spongebob(interaction: Interaction, spongebob_gif:
         spongebob = "No text provided";
     }
 
+    // Attach the Image link
     const attachment = new MessageAttachment(spongebob_gif, 'spongebob.gif');
 
+    // Replty with the spongebobified text and a gif of spongebob
     await interaction.reply({ content: spongebob, files: [attachment] });
 }
