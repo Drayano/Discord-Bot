@@ -3,6 +3,9 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dotenv from "dotenv";
 
+import * as http from 'http';
+import * as https from 'https'; 
+
 dotenv.config();
 
 const discord_client: Client = new Client({ 
@@ -130,6 +133,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         await interaction.reply({ embeds: [embed], files: [attachment] });
     }
 
+    // emplois_ia command
     else if (commandName === "emplois_ia") {
         // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
@@ -200,6 +204,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         let text: string = "";
         let spongebob: string = "";
 
+        // Check if the input text isn't an empty string
         if (options.get("input")?.value?.toString().length !== undefined) {
             for (let i = 0; i < options.get("input")?.value?.toString().length!; i++) {
                 text = options.get("input")?.value?.toString()!;
@@ -214,6 +219,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
             }
         }
 
+        // If the user provides an empty string show an error
         else {
             console.log("Error on the spongebob command, no text provided !");
             spongebob = "No text provided";
@@ -243,6 +249,34 @@ discord_client.on("messageCreate", (message: Message) => {
     // The message is being sent in a discord server so we can get (channel.name)
     else {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
+
+        // Get the mentions IDs and use them to find out the named of who's being mentioned
+        let text = message.content;
+        text = text.replace(/[^0-9\s]/g, "");
+        let arr = text.split(" ");
+        arr.forEach(id => {
+            if (discord_client.users.cache.find(user => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find(user => user.id === id)?.tag}`);
+            }
+        });
+
+        // Get the emotes IDs and use them to find out the emote URL
+        let emoji = message.content;
+        emoji = emoji.replace(/[^0-9\s]/g, "");
+        
+        let arr1 = emoji.split(" ");
+
+        arr1.forEach(id => {
+            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
+                const { statusCode } = res;
+                if (statusCode === 200) { // HTTP 200 = OK
+                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
+                } 
+            })   
+        });
+        
+        
+        // Get Attachement files if there are any
         message.attachments.each(attachment_item => console.log(`Attached file : ${attachment_item.attachment}`));
 
         // Print embeds if there are any
@@ -260,7 +294,6 @@ discord_client.on("messageCreate", (message: Message) => {
 // Login to Discord with the token
 discord_client.login(discord_token);
 
-// TODO : Add Spongebob case through a command
 // TODO : Add more commands
 // TODO : Restrict some commands to relevant channels in Yugen
 // TODO : No restriction in Playground
