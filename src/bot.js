@@ -65,6 +65,18 @@ const commands = [
                 description: "Choose a meme template",
                 required: true,
                 type: 3 // String
+            },
+            {
+                name: "first_line",
+                description: "First Meme Line",
+                required: true,
+                type: 3 // String
+            },
+            {
+                name: "second_line",
+                description: "Second Meme Line",
+                required: true,
+                type: 3 // String
             }
         ]
     }

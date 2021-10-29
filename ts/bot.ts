@@ -3,6 +3,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dotenv from "dotenv";
 
+import * as http from "http";
 import * as https from 'https'; 
 
 import { command_help } from "./Commands/help.js";
@@ -76,6 +77,18 @@ const commands: CommandInterface[] = [
             {
                 name: "input",
                 description: "Choose a meme template",
+                required: true,
+                type: 3 // String
+            },
+            {
+                name: "first_line",
+                description: "First Meme Line",
+                required: true,
+                type: 3 // String
+            },
+            {
+                name: "second_line",
+                description: "Second Meme Line",
                 required: true,
                 type: 3 // String
             }
