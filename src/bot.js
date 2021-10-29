@@ -27,6 +27,12 @@ const rest_1 = require("@discordjs/rest");
 const v9_1 = require("discord-api-types/v9");
 const dotenv_1 = __importDefault(require("dotenv"));
 const https = __importStar(require("https"));
+const help_1 = require("./Commands/help");
+const emplois_sid_1 = require("./Commands/emplois_sid");
+const emplois_ia_1 = require("./Commands/emplois_ia");
+const drive_1 = require("./Commands/drive");
+const code_1 = require("./Commands/code");
+const spongebob_1 = require("./Commands/spongebob");
 dotenv_1.default.config();
 const discord_client = new discord_js_1.Client({
     intents: [
@@ -113,118 +119,28 @@ discord_client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
         return;
     }
-    const { commandName, options } = interaction;
+    const { commandName } = interaction;
     // help command
     if (commandName === "help") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-        }
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle(`${discord_client.user?.username} BOT Help`)
-            .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
-            /emplois_sid : Shows the schedule for SID \n
-            /emplois_ia : Shows the schedule for IA \n
-            /drive : Shows the Mega Drive link for SID \n
-            /code : Shows the link to the Bot source code \n
-            /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE`);
-        await interaction.reply({ embeds: [embed] });
+        (0, help_1.command_help)(discord_client, interaction);
     }
     // emplois_sid command
     else if (commandName === "emplois_sid") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-        }
-        const attachment = new discord_js_1.MessageAttachment(emplois_sid_link, 'emplois_sid.png');
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle("Emplois du temps SID")
-            .setImage('attachment://emplois_sid.png');
-        await interaction.reply({ embeds: [embed], files: [attachment] });
+        (0, emplois_sid_1.command_emplois_sid)(interaction, emplois_sid_link);
     }
     // emplois_ia command
     else if (commandName === "emplois_ia") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-        }
-        const attachment = new discord_js_1.MessageAttachment(emplois_ia_link, 'emplois_ia.png');
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle("Emplois du temps IA")
-            .setImage('attachment://emplois_ia.png');
-        await interaction.reply({ embeds: [embed], files: [attachment] });
+        (0, emplois_ia_1.command_emplois_ia)(interaction, emplois_ia_link);
     }
     else if (commandName === "drive") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-        }
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle("Mega Drive")
-            .setDescription(`Lien du Mega Drive - SID : ${mega_link}`);
-        await interaction.reply({ embeds: [embed] });
+        (0, drive_1.command_drive)(interaction, mega_link);
     }
     else if (commandName === "code") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-        }
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle("Bot Source Code")
-            .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
-        await interaction.reply({ embeds: [embed] });
+        (0, code_1.command_code)(interaction);
     }
     // spongebob command
     else if (commandName === "spongebob") {
-        // Check if the interaction is happening in a discord server (to get channel.name)
-        if (interaction.inGuild()) {
-            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
-        }
-        // Interaction happening in a DM
-        else {
-            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
-        }
-        let text = "";
-        let spongebob = "";
-        // Check if the input text isn't an empty string
-        if (options.get("input")?.value?.toString().length !== undefined) {
-            for (let i = 0; i < options.get("input")?.value?.toString().length; i++) {
-                text = options.get("input")?.value?.toString();
-                if (i % 2 === 0) {
-                    spongebob += text.charAt(i).toLowerCase();
-                }
-                else if (i % 2 === 1) {
-                    spongebob += text.charAt(i).toUpperCase();
-                }
-            }
-        }
-        // If the user provides an empty string show an error
-        else {
-            console.log("Error on the spongebob command, no text provided !");
-            spongebob = "No text provided";
-        }
-        const attachment = new discord_js_1.MessageAttachment(spongebob_gif, 'spongebob.gif');
-        await interaction.reply({ content: spongebob, files: [attachment] });
+        (0, spongebob_1.command_spongebob)(interaction, spongebob_gif);
     }
 });
 // Messages handling
