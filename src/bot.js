@@ -202,8 +202,8 @@ discord_client.on("interactionCreate", async (interaction) => {
         }
         const embed = new discord_js_1.MessageEmbed()
             .setImage(spongebob_gif);
-        yield interaction.reply({ embeds: [embed] });
-        yield interaction.editReply(spongebob);
+        await interaction.reply({ embeds: [embed] });
+        await interaction.editReply(spongebob);
     }
 });
 // Messages handling
