@@ -42,6 +42,10 @@ const discord_client = new discord_js_1.Client({
 });
 const commands = [
     {
+        name: "help",
+        description: "Shows the list of commands available"
+    },
+    {
         name: "emplois_sid",
         description: "Emplois du temps SID"
     },
@@ -83,10 +87,9 @@ const rest = new rest_1.REST({ version: '9' }).setToken(discord_token);
         console.log('Started refreshing application (/) commands.');
         await rest.put(
         // This is for testing purposes
-        v9_1.Routes.applicationGuildCommands(client_id, guild_id), 
+        // Routes.applicationGuildCommands(client_id, guild_id),
         // This is for production
-        //Routes.applicationCommands(client_id),
-        { body: commands });
+        v9_1.Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
@@ -111,8 +114,28 @@ discord_client.on("interactionCreate", async (interaction) => {
         return;
     }
     const { commandName, options } = interaction;
+    // help command
+    if (commandName === "help") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+        // Interaction happening in a DM
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
+        const embed = new discord_js_1.MessageEmbed()
+            .setTitle(`${discord_client.user?.username} BOT Help`)
+            .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
+            /emplois_sid : Shows the schedule for SID \n
+            /emplois_ia : Shows the schedule for IA \n
+            /drive : Shows the Mega Drive link for SID \n
+            /code : Shows the link to the Bot source code \n
+            /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE`);
+        await interaction.reply({ embeds: [embed] });
+    }
     // emplois_sid command
-    if (commandName === "emplois_sid") {
+    else if (commandName === "emplois_sid") {
         // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);

@@ -31,6 +31,10 @@ interface CommandInterface {
 
 const commands: CommandInterface[] = [
     {
+        name: "help",
+        description: "Shows the list of commands available"
+    },
+    {
         name: "emplois_sid",
         description: "Emplois du temps SID"
     },
@@ -76,7 +80,7 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			//Routes.applicationGuildCommands(client_id, guild_id),
+			// Routes.applicationGuildCommands(client_id, guild_id),
             // This is for production
             Routes.applicationCommands(client_id),
 			{ body: commands },
@@ -113,8 +117,32 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 
     const { commandName, options } = interaction;
 
+    // help command
+    if (commandName === "help") {
+        // Check if the interaction is happening in a discord server (to get channel.name)
+        if (interaction.inGuild()) {
+            console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
+        }
+
+        // Interaction happening in a DM
+        else {
+            console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
+        }
+
+        const embed = new MessageEmbed()
+            .setTitle(`${discord_client.user?.username} BOT Help`)
+            .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
+            /emplois_sid : Shows the schedule for SID \n
+            /emplois_ia : Shows the schedule for IA \n
+            /drive : Shows the Mega Drive link for SID \n
+            /code : Shows the link to the Bot source code \n
+            /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE`);
+
+        await interaction.reply({ embeds: [embed] });
+    }
+
     // emplois_sid command
-    if (commandName === "emplois_sid") {
+    else if (commandName === "emplois_sid") {
         // Check if the interaction is happening in a discord server (to get channel.name)
         if (interaction.inGuild()) {
             console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
@@ -228,7 +256,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         const embed = new MessageEmbed()
             .setImage(spongebob_gif);
 
-        await interaction.reply({ embeds: [embed]})
+        await interaction.reply({ embeds: [embed] })
         await interaction.editReply(spongebob);
     }
 });
