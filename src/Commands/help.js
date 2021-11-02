@@ -21,6 +21,7 @@ export async function command_help(discord_client, interaction) {
         /drive : Shows the Mega Drive link for SID \n
         /code : Shows the link to the Bot source code \n
         /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE \n
+        /xkcd : Post a random XKCD Comic \n
         /memes [input] [first_line] [second_line] : Create a meme from the input using the lines as captions
         Eg : /memes input:drake first_line:nice second_line:meme
         To create a Drake no/yes meme with the captions "nice" and "meme"`);
