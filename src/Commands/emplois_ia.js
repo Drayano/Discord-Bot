@@ -4,20 +4,15 @@ export async function command_emplois_ia(interaction, emplois_ia_link) {
         return;
     }
     const { commandName } = interaction;
-    // Check if the interaction is happening in a discord server (to get channel.name)
-    if (interaction.inGuild()) {
+    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
         console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
     }
-    // Interaction happening in a DM
     else {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
-    // Attach the Image link then
-    // Create an Embed with a Title and Description
     const attachment = new MessageAttachment(emplois_ia_link, 'emplois_ia.png');
     const embed = new MessageEmbed()
         .setTitle("Emplois du temps IA")
         .setImage('attachment://emplois_ia.png');
-    // Reply with the Embed and the Attachement
     await interaction.reply({ embeds: [embed], files: [attachment] });
 }

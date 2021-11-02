@@ -4,15 +4,12 @@ export async function command_code(interaction) {
         return;
     }
     const { commandName } = interaction;
-    // Check if the interaction is happening in a discord server (to get channel.name)
-    if (interaction.inGuild()) {
+    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
         console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
     }
-    // Interaction happening in a DM
     else {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
-    // Create an Embed with a Title and Description
     const embed = new MessageEmbed()
         .setTitle("Bot Source Code")
         .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);

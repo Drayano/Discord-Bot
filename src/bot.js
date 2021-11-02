@@ -53,7 +53,7 @@ const commands = [
                 name: "input",
                 description: "Text to transform",
                 required: true,
-                type: 3 // String
+                type: 3
             }
         ]
     },
@@ -65,19 +65,19 @@ const commands = [
                 name: "input",
                 description: "Choose a meme template",
                 required: true,
-                type: 3 // String
+                type: 3
             },
             {
                 name: "first_line",
                 description: "First Meme Line",
                 required: true,
-                type: 3 // String
+                type: 3
             },
             {
                 name: "second_line",
                 description: "Second Meme Line",
                 required: true,
-                type: 3 // String
+                type: 3
             }
         ]
     },
@@ -97,18 +97,13 @@ const rest = new REST({ version: '9' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
-        await rest.put(
-        // This is for testing purposes
-        // Routes.applicationGuildCommands(client_id, guild_id),
-        // This is for production
-        Routes.applicationCommands(client_id), { body: commands });
+        await rest.put(Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
         console.error(error);
     }
 })();
-// When the client is ready, run this code (only once)
 discord_client.once("ready", () => {
     console.log(`${discord_client.user?.tag} has logged in`);
     discord_client.user?.setPresence({
@@ -120,37 +115,29 @@ discord_client.once("ready", () => {
     });
     console.log(`${discord_client.user?.tag} status set to "WATCHING USTO"`);
 });
-// Slash (/) commands handling
 discord_client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
         return;
     }
     const { commandName } = interaction;
-    // help command
     if (commandName === "help") {
         command_help(discord_client, interaction);
     }
-    // emplois_sid command
     else if (commandName === "emplois_sid") {
         command_emplois_sid(interaction, emplois_sid_link);
     }
-    // emplois_ia command
     else if (commandName === "emplois_ia") {
         command_emplois_ia(interaction, emplois_ia_link);
     }
-    // drive command
     else if (commandName === "drive") {
         command_drive(interaction, mega_link);
     }
-    // code command
     else if (commandName === "code") {
         command_code(interaction);
     }
-    // spongebob command
     else if (commandName === "spongebob") {
         command_spongebob(interaction, spongebob_gif);
     }
-    // memes command
     else if (commandName === "memes") {
         command_memes(interaction);
     }
@@ -158,21 +145,16 @@ discord_client.on("interactionCreate", async (interaction) => {
         command_xkcd(interaction);
     }
 });
-// Messages handling
 discord_client.on("messageCreate", (message) => {
-    // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
-        // Print embeds if there are any
         if (message.embeds.length > 0) {
             message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
-    // The message is being sent in a discord server so we can get (channel.name)
     else {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
-        // Get the mentions IDs and use them to find out the named of who's being mentioned
         let text = message.content;
         text = text.replace(/[^0-9\s]/g, "");
         let arr = text.split(" ");
@@ -181,31 +163,24 @@ discord_client.on("messageCreate", (message) => {
                 console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
             }
         });
-        // Get the emotes IDs and use them to find out the emote URL
         let emoji = message.content;
         emoji = emoji.replace(/[^0-9\s]/g, "");
         let arr1 = emoji.split(" ");
         arr1.forEach((id) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
-                if (statusCode === 200) { // HTTP 200 = OK
+                if (statusCode === 200) {
                     console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
                 }
             });
         });
-        // Get Attachement files if there are any
         message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
-        // Print embeds if there are any
         if (message.embeds.length > 0) {
             message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
-    // Don't reply to ourselves or other bots
     if (message.author.bot) {
         return;
     }
 });
-// Login to Discord with the token
 discord_client.login(discord_token);
-// TODO : Restrict some commands to relevant channels in Yugen
-// TODO : No restriction in Playground
