@@ -10,6 +10,7 @@ import { command_drive } from "./Commands/drive.js";
 import { command_code } from "./Commands/code.js";
 import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
+import { command_xkcd } from "./Commands/xkcd.js";
 dotenv.config();
 const discord_client = new Client({
     intents: [
@@ -79,6 +80,10 @@ const commands = [
                 type: 3 // String
             }
         ]
+    },
+    {
+        name: "xkcd",
+        description: "Post a random XKCD"
     }
 ];
 const discord_token = process.env.DISCORDJS_BOT_TOKEN;
@@ -148,6 +153,9 @@ discord_client.on("interactionCreate", async (interaction) => {
     // memes command
     else if (commandName === "memes") {
         command_memes(interaction);
+    }
+    else if (commandName === "xkcd") {
+        command_xkcd(interaction);
     }
 });
 // Messages handling

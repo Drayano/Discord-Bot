@@ -12,6 +12,7 @@ import { command_drive } from "./Commands/drive.js";
 import { command_code } from "./Commands/code.js";
 import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
+import { command_xkcd } from "./Commands/xkcd.js";
 
 dotenv.config();
 
@@ -92,6 +93,10 @@ const commands: CommandInterface[] = [
                 type: 3 // String
             }
         ]
+    },
+    {
+        name: "xkcd",
+        description: "Post a random XKCD"
     }
 ];
 
@@ -181,6 +186,10 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
     // memes command
     else if (commandName === "memes") {
         command_memes(interaction);
+    }
+
+    else if (commandName === "xkcd") {
+        command_xkcd(interaction);
     }
 });
 
