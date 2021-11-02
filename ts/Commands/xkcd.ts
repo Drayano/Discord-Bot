@@ -1,6 +1,7 @@
 import { Interaction, MessageAttachment, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
 
+// Generate a random number
 function getRandomInt(max: number) {
     return Math.floor(Math.random() * max);
 }
