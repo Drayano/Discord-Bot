@@ -1,4 +1,4 @@
-import { Client, Intents, Interaction, Message, MessageAttachment, MessageEmbed } from "discord.js";
+import { Client, Intents, Interaction, Message, MessageAttachment, MessageEmbed, User } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dotenv from "dotenv";
@@ -201,22 +201,22 @@ discord_client.on("messageCreate", (message: Message) => {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         
         // Get the mentions IDs and use them to find out the named of who's being mentioned
-        let text = message.content;
+        let text: string = message.content;
         text = text.replace(/[^0-9\s]/g, "");
-        let arr = text.split(" ");
-        arr.forEach((id: any) => {
-            if (discord_client.users.cache.find((user: any) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user: any) => user.id === id)?.tag}`);
+        const arr: string[] = text.split(" ");
+        arr.forEach((id: string) => {
+            if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`);
             }
         });
 
         // Get the emotes IDs and use them to find out the emote URL
-        let emoji = message.content;
+        let emoji: string = message.content;
         emoji = emoji.replace(/[^0-9\s]/g, "");
         
-        let arr1 = emoji.split(" ");
+        const arr1: string[] = emoji.split(" ");
 
-        arr1.forEach((id: any) => {
+        arr1.forEach((id: string) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
                 if (statusCode === 200) { // HTTP 200 = OK
@@ -239,22 +239,22 @@ discord_client.on("messageCreate", (message: Message) => {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
 
         // Get the mentions IDs and use them to find out the named of who's being mentioned
-        let text = message.content;
+        let text: string = message.content;
         text = text.replace(/[^0-9\s]/g, "");
-        let arr = text.split(" ");
-        arr.forEach((id: any) => {
-            if (discord_client.users.cache.find((user: any) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user: any) => user.id === id)?.tag}`);
+        const arr: string[] = text.split(" ");
+        arr.forEach((id: string) => {
+            if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`);
             }
         });
 
         // Get the emotes IDs and use them to find out the emote URL
-        let emoji = message.content;
+        let emoji: string = message.content;
         emoji = emoji.replace(/[^0-9\s]/g, "");
         
-        let arr1 = emoji.split(" ");
+        const arr1: string[] = emoji.split(" ");
 
-        arr1.forEach((id: any) => {
+        arr1.forEach((id: string) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
                 if (statusCode === 200) { // HTTP 200 = OK

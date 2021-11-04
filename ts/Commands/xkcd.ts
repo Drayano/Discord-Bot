@@ -1,8 +1,8 @@
 import { Interaction, MessageAttachment, MessageEmbed } from "discord.js";
-import fetch from "node-fetch";
+import fetch, { Response } from "node-fetch";
 
 // Generate a random number
-function getRandomInt(max: number) {
+function getRandomInt(max: number): number {
     return Math.floor(Math.random() * max);
 }
 
@@ -26,21 +26,21 @@ export async function command_xkcd(interaction: Interaction) {
 
     // Fetch the latest XKCD Number
     fetch("https://xkcd.com/info.0.json")
-        .then((res: any) => res.json())
+        .then((res: Response) => res.json())
         .then((result: any) => {
             // Get current latest XKCD Number and use it to generate a random number
             // 0 < comic_number < latest
-            const latest = result.num;
-            const comic_number = getRandomInt(latest) + 1; // Start at 1
+            const latest: number = result.num;
+            const comic_number: number = getRandomInt(latest) + 1; // Start at 1
 
             // Fetch a random XKCD
             fetch(`https://xkcd.com/${comic_number}/info.0.json`)
-                .then((res: any) => res.json())
+                .then((res: Response) => res.json())
                 .then((result: any) => {
                     // Attach the Image link then
                     // Create an Embed with a Title and Alt message as footer
-                    const attachment = new MessageAttachment(result.img, `xkcd_${comic_number}.png`);
-                    const embed = new MessageEmbed()
+                    const attachment: MessageAttachment = new MessageAttachment(result.img, `xkcd_${comic_number}.png`);
+                    const embed: MessageEmbed = new MessageEmbed()
                         .setTitle(`XKCD #${comic_number}`)
                         .setImage(`attachment://xkcd_${comic_number}.png`)
                         .setFooter(result.alt);

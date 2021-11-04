@@ -1,5 +1,5 @@
 import { Interaction } from "discord.js";
-import fetch from "node-fetch";
+import fetch, { Response } from "node-fetch";
 
 export async function command_memes(interaction: Interaction): Promise<void> {
     if (!interaction.isCommand()) {
@@ -11,29 +11,29 @@ export async function command_memes(interaction: Interaction): Promise<void> {
     // Check if the interaction is happening in a discord server,
     // If the Channel is a Text Channel (i.e : not a voice, thread or news channel) (to get channel.name)
     if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
-        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
+        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
     }
 
     // Interaction happening in a DM
     else {
-        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
+        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
     }
 
     // Setup the login variables
-    const username = process.env.IMGFLIP_USERNAME;
-    const password = process.env.IMGFLIP_PASSWORD;
+    const username: string = process.env.IMGFLIP_USERNAME;
+    const password: string = process.env.IMGFLIP_PASSWORD;
 
     // Fetch the memes list
     fetch("https://api.imgflip.com/get_memes")
-        .then((res: any) => res.json())
+        .then((res: Response) => res.json())
         .then((result: any) => {
             // Loop through the result looking for a match
-            const memes = result.data.memes;
-            const meme = memes.find((meme: any) => {
+            const memes: string[] = result.data.memes;
+            const meme: any = memes.find((meme: any) => {
                 // If the input name matches the name of any meme returned by the API
                 // Matches the first result
-                const meme_lowercase = meme.name.toString().toLowerCase();
-                const input_string = options.get("input")?.value?.toString().toLowerCase();
+                const meme_lowercase: string = meme.name.toString().toLowerCase();
+                const input_string: any = options.get("input")?.value?.toString().toLowerCase();
 
                 return meme_lowercase.includes(input_string);
             })
@@ -59,7 +59,7 @@ export async function command_memes(interaction: Interaction): Promise<void> {
 
                 // Send an HTTP POST request with the necessary informations to make the meme
                 fetch(`https://api.imgflip.com/caption_image?template_id=${params.template_id}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`)
-                    .then((res: any) => res.json())
+                    .then((res: Response) => res.json())
                     .then((result: any) => {
                         // Reply with the captioned meme
                         interaction.reply(result.data.url);

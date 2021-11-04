@@ -150,7 +150,7 @@ discord_client.on("messageCreate", (message) => {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         let text = message.content;
         text = text.replace(/[^0-9\s]/g, "");
-        let arr = text.split(" ");
+        const arr = text.split(" ");
         arr.forEach((id) => {
             if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
                 console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
@@ -158,7 +158,7 @@ discord_client.on("messageCreate", (message) => {
         });
         let emoji = message.content;
         emoji = emoji.replace(/[^0-9\s]/g, "");
-        let arr1 = emoji.split(" ");
+        const arr1 = emoji.split(" ");
         arr1.forEach((id) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
@@ -176,7 +176,7 @@ discord_client.on("messageCreate", (message) => {
         console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
         let text = message.content;
         text = text.replace(/[^0-9\s]/g, "");
-        let arr = text.split(" ");
+        const arr = text.split(" ");
         arr.forEach((id) => {
             if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
                 console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
@@ -184,7 +184,7 @@ discord_client.on("messageCreate", (message) => {
         });
         let emoji = message.content;
         emoji = emoji.replace(/[^0-9\s]/g, "");
-        let arr1 = emoji.split(" ");
+        const arr1 = emoji.split(" ");
         arr1.forEach((id) => {
             https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
                 const { statusCode } = res;
