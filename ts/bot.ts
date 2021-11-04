@@ -188,6 +188,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         command_memes(interaction);
     }
 
+    // xkcd command
     else if (commandName === "xkcd") {
         command_xkcd(interaction);
     }
@@ -198,6 +199,33 @@ discord_client.on("messageCreate", (message: Message) => {
     // Check if the message is sent in a discord DM
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
+        
+        // Get the mentions IDs and use them to find out the named of who's being mentioned
+        let text = message.content;
+        text = text.replace(/[^0-9\s]/g, "");
+        let arr = text.split(" ");
+        arr.forEach((id: any) => {
+            if (discord_client.users.cache.find((user: any) => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find((user: any) => user.id === id)?.tag}`);
+            }
+        });
+
+        // Get the emotes IDs and use them to find out the emote URL
+        let emoji = message.content;
+        emoji = emoji.replace(/[^0-9\s]/g, "");
+        
+        let arr1 = emoji.split(" ");
+
+        arr1.forEach((id: any) => {
+            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
+                const { statusCode } = res;
+                if (statusCode === 200) { // HTTP 200 = OK
+                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
+                } 
+            })   
+        });
+        
+        // Get Attachement files if there are any
         message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
 
         // Print embeds if there are any

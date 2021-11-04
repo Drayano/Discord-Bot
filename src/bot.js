@@ -148,6 +148,25 @@ discord_client.on("interactionCreate", async (interaction) => {
 discord_client.on("messageCreate", (message) => {
     if (message.channel.type === "DM") {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
+        let text = message.content;
+        text = text.replace(/[^0-9\s]/g, "");
+        let arr = text.split(" ");
+        arr.forEach((id) => {
+            if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
+                console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
+            }
+        });
+        let emoji = message.content;
+        emoji = emoji.replace(/[^0-9\s]/g, "");
+        let arr1 = emoji.split(" ");
+        arr1.forEach((id) => {
+            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
+                const { statusCode } = res;
+                if (statusCode === 200) {
+                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
+                }
+            });
+        });
         message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
         if (message.embeds.length > 0) {
             message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
