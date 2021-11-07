@@ -86,8 +86,8 @@ const commands = [
         description: "Post a random XKCD"
     }
 ];
-const discord_token = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token = process.env.DISCORDJS_BOT_TOKEN;
+const client_id = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id = process.env.GUILD_ID_PLAYGROUND;
 const yugen_etudes = process.env.YUGEN_CHANNEL_ID_ETUDES;
 const yugen_resources = process.env.YUGEN_CHANNEL_ID_RESOURCES;
@@ -96,12 +96,11 @@ const yugen_xkcd = process.env.YUGEN_CHANNEL_ID_XKCD;
 const emplois_sid_link = process.env.EMPLOIS_SID;
 const emplois_ia_link = process.env.EMPLOIS_IA;
 const mega_link = process.env.MEGA_DRIVE_SID;
-const spongebob_gif = process.env.SPONGEBOB_GIF;
 const rest = new REST({ version: '9' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationGuildCommands(client_id, playground_guild_id), { body: commands });
+        await rest.put(Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {
@@ -165,7 +164,7 @@ discord_client.on("interactionCreate", async (interaction) => {
     }
     else if (commandName === "spongebob") {
         console.log(`with '${options.get("input")?.value?.toString()}'`);
-        command_spongebob(interaction, spongebob_gif);
+        command_spongebob(interaction);
     }
     else if (commandName === "memes") {
         console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);

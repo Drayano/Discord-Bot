@@ -1,6 +1,6 @@
 import { Interaction, MessageAttachment } from "discord.js";
 
-export async function command_spongebob(interaction: Interaction, spongebob_gif: string) {
+export async function command_spongebob(interaction: Interaction) {
     if (!interaction.isCommand()) {
         return;
     }
@@ -27,13 +27,10 @@ export async function command_spongebob(interaction: Interaction, spongebob_gif:
 
     // If the user provides an empty string show an error
     else {
-        console.log("Error on the spongebob command, no text provided !");
-        spongebob = "No text provided";
+        console.log("ERROR : on the spongebob command, no text provided !");
+        spongebob = "ERROR : No text provided";
     }
 
-    // Attach the Image link
-    const attachment = new MessageAttachment(spongebob_gif, 'spongebob.gif');
-
     // Replty with the spongebobified text and a gif of spongebob
-    await interaction.reply({ content: spongebob, files: [attachment] });
+    await interaction.reply({ content: spongebob });
 }

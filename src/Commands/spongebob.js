@@ -1,5 +1,4 @@
-import { MessageAttachment } from "discord.js";
-export async function command_spongebob(interaction, spongebob_gif) {
+export async function command_spongebob(interaction) {
     if (!interaction.isCommand()) {
         return;
     }
@@ -18,9 +17,8 @@ export async function command_spongebob(interaction, spongebob_gif) {
         }
     }
     else {
-        console.log("Error on the spongebob command, no text provided !");
-        spongebob = "No text provided";
+        console.log("ERROR : on the spongebob command, no text provided !");
+        spongebob = "ERROR : No text provided";
     }
-    const attachment = new MessageAttachment(spongebob_gif, 'spongebob.gif');
-    await interaction.reply({ content: spongebob, files: [attachment] });
+    await interaction.reply({ content: spongebob });
 }

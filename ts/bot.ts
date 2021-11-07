@@ -100,8 +100,8 @@ const commands: CommandInterface[] = [
     }
 ];
 
-const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 const yugen_etudes: string = process.env.YUGEN_CHANNEL_ID_ETUDES;
 const yugen_resources: string = process.env.YUGEN_CHANNEL_ID_RESOURCES;
@@ -110,7 +110,6 @@ const yugen_xkcd: string = process.env.YUGEN_CHANNEL_ID_XKCD;
 const emplois_sid_link: string = process.env.EMPLOIS_SID;
 const emplois_ia_link: string = process.env.EMPLOIS_IA;
 const mega_link: string = process.env.MEGA_DRIVE_SID;
-const spongebob_gif: string = process.env.SPONGEBOB_GIF;
 
 const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
@@ -120,9 +119,9 @@ const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			Routes.applicationGuildCommands(client_id, playground_guild_id),
+			// Routes.applicationGuildCommands(client_id, playground_guild_id),
             // This is for production
-            // Routes.applicationCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
@@ -217,7 +216,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
     // spongebob command
     else if (commandName === "spongebob") {
         console.log(`with '${options.get("input")?.value?.toString()}'`);
-        command_spongebob(interaction, spongebob_gif);
+        command_spongebob(interaction);
     }
 
     // memes command

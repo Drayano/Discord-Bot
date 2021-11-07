@@ -14,7 +14,6 @@ declare global {
         MEGA_DRIVE_SID: string,
         EMPLOIS_SID: string,
         EMPLOIS_IA: string,
-        SPONGEBOB_GIF: string,
         IMGFLIP_USERNAME: string,
         IMGFLIP_PASSWORD: string
       }
