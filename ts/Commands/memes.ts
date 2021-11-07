@@ -6,18 +6,7 @@ export async function command_memes(interaction: Interaction): Promise<void> {
         return;
     }
 
-    const { commandName, options } = interaction;
-    
-    // Check if the interaction is happening in a discord server,
-    // If the Channel is a Text Channel (i.e : not a voice, thread or news channel) (to get channel.name)
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
-        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-    }
-
-    // Interaction happening in a DM
-    else {
-        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-    }
+    const { options } = interaction;
 
     // Setup the login variables
     const username: string = process.env.IMGFLIP_USERNAME;

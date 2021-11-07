@@ -5,19 +5,6 @@ export async function command_help(discord_client: Client, interaction: Interact
         return;
     }
 
-    const { commandName } = interaction;
-    
-    // Check if the interaction is happening in a discord server,
-    // If the Channel is a Text Channel (i.e : not a voice, thread or news channel) (to get channel.name)
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
-        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
-    }
-
-    // Interaction happening in a DM
-    else {
-        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
-    }
-
     // Create an Embed with a Title and Description
     const embed = new MessageEmbed()
         .setTitle(`${discord_client.user?.username} BOT Help`)

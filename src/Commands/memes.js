@@ -3,13 +3,7 @@ export async function command_memes(interaction) {
     if (!interaction.isCommand()) {
         return;
     }
-    const { commandName, options } = interaction;
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
-        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-    }
-    else {
-        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-    }
+    const { options } = interaction;
     const username = process.env.IMGFLIP_USERNAME;
     const password = process.env.IMGFLIP_PASSWORD;
     fetch("https://api.imgflip.com/get_memes")

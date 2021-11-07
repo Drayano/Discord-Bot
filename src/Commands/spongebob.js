@@ -3,13 +3,7 @@ export async function command_spongebob(interaction, spongebob_gif) {
     if (!interaction.isCommand()) {
         return;
     }
-    const { commandName, options } = interaction;
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
-        console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
-    }
-    else {
-        console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command with '${options.get("input")?.value?.toString()}'`);
-    }
+    const { options } = interaction;
     let text = "";
     let spongebob = "";
     if (options.get("input")?.value?.toString().length !== undefined) {
