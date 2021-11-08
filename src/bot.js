@@ -168,7 +168,7 @@ discord_client.on("interactionCreate", async (interaction) => {
     }
     else if (commandName === "memes") {
         console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-        if (interaction.channel?.id === yugen_memes || interaction.guild?.id === playground_guild_id) {
+        if (!interaction.inGuild() || interaction.channel?.id === yugen_memes || interaction.guild?.id === playground_guild_id) {
             command_memes(interaction);
         }
         else {
@@ -177,7 +177,7 @@ discord_client.on("interactionCreate", async (interaction) => {
         }
     }
     else if (commandName === "xkcd") {
-        if (interaction.channel?.id === yugen_xkcd || interaction.guild?.id === playground_guild_id) {
+        if (!interaction.inGuild() || interaction.channel?.id === yugen_xkcd || interaction.guild?.id === playground_guild_id) {
             command_xkcd(interaction);
         }
         else {
