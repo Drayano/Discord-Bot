@@ -23,7 +23,7 @@ export async function command_help(discord_client, interaction) {
             To create a Drake no/yes meme with the captions "nice" and "meme"
             Channel : ${yugen_memes} \n
             /translate [target] [input] : Translate the input text into the targeted language. 
-            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, jp etc...)`);
+            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, ja etc...)`);
         await interaction.reply({ embeds: [embed] });
     }
     else if (!interaction.inGuild()) {
@@ -37,7 +37,7 @@ export async function command_help(discord_client, interaction) {
             Eg : /memes input:drake first_line:nice second_line:meme
             To create a Drake no/yes meme with the captions "nice" and "meme" \n
             /translate [target] [input] : Translate the input text into the targeted language. 
-            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, jp etc...)`);
+            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, ja etc...)`);
         await interaction.reply({ embeds: [embed] });
     }
     else {
@@ -54,7 +54,7 @@ export async function command_help(discord_client, interaction) {
             Eg : /memes input:drake first_line:nice second_line:meme
             To create a Drake no/yes meme with the captions "nice" and "meme" \n
             /translate [target] [input] : Translate the input text into the targeted language. 
-            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, jp etc...)`);
+            Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, ja etc...)`);
         await interaction.reply({ embeds: [embed] });
     }
 }
