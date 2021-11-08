@@ -117,7 +117,7 @@ discord_client.once("ready", () => {
         status: "online",
         activities: [{
                 type: "WATCHING",
-                name: "USTO"
+                name: "GERMANY"
             }]
     });
     console.log(`${discord_client.user?.tag} status set to "WATCHING USTO"`);

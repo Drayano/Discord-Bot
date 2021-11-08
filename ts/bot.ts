@@ -146,7 +146,7 @@ discord_client.once("ready", () => {
         status: "online",  // You can show online, idle....
         activities: [{
             type: "WATCHING",
-            name: "USTO"
+            name: "GERMANY"
         }]
     });
 
