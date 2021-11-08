@@ -3,11 +3,11 @@ export async function command_help(discord_client, interaction) {
     if (!interaction.isCommand()) {
         return;
     }
+    const yugen_guild = process.env.GUILD_ID_YUGEN;
     const yugen_etudes = process.env.YUGEN_CHANNEL_ID_ETUDES;
     const yugen_resources = process.env.YUGEN_CHANNEL_ID_RESOURCES;
     const yugen_memes = process.env.YUGEN_CHANNEL_ID_MEMES;
     const yugen_xkcd = process.env.YUGEN_CHANNEL_ID_XKCD;
-    const yugen_guild = process.env.GUILD_ID_YUGEN;
     if (interaction.guild?.id === yugen_guild) {
         const embed = new MessageEmbed()
             .setTitle(`${discord_client.user?.username} BOT Help`)

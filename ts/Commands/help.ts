@@ -5,11 +5,11 @@ export async function command_help(discord_client: Client, interaction: Interact
         return;
     }
 
+    const yugen_guild: string = process.env.GUILD_ID_YUGEN;
     const yugen_etudes: string = process.env.YUGEN_CHANNEL_ID_ETUDES;
     const yugen_resources: string = process.env.YUGEN_CHANNEL_ID_RESOURCES;
     const yugen_memes: string = process.env.YUGEN_CHANNEL_ID_MEMES;
     const yugen_xkcd: string = process.env.YUGEN_CHANNEL_ID_XKCD;
-    const yugen_guild: string = process.env.GUILD_ID_YUGEN;
 
     if (interaction.guild?.id === yugen_guild) {
         // Create an Embed with a Title and Description

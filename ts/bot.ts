@@ -103,6 +103,7 @@ const commands: CommandInterface[] = [
 const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
 const client_id: string = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
+const yugen_guild: string = process.env.GUILD_ID_YUGEN;
 const yugen_etudes: string = process.env.YUGEN_CHANNEL_ID_ETUDES;
 const yugen_resources: string = process.env.YUGEN_CHANNEL_ID_RESOURCES;
 const yugen_memes: string = process.env.YUGEN_CHANNEL_ID_MEMES;
@@ -110,6 +111,10 @@ const yugen_xkcd: string = process.env.YUGEN_CHANNEL_ID_XKCD;
 const emplois_sid_link: string = process.env.EMPLOIS_SID;
 const emplois_ia_link: string = process.env.EMPLOIS_IA;
 const mega_link: string = process.env.MEGA_DRIVE_SID;
+
+const study_channel_error: string = "Yugen Etudes, Yugen Resources, Playground Server";
+const meme_channel_error: string = "Yugen Memes, Playground Server";
+const xkcd_channel_error: string = "Yugen XKCD, Playground Server"
 
 const rest: REST = new REST({ version: '9' }).setToken(discord_token);
 
@@ -179,8 +184,15 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         }
 
         else {
-            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : Yugen Etudes, Yugen Resources, Playground Server`);
-            interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : ${study_channel_error}`);
+
+            if (interaction.guild?.id === yugen_guild) {
+                interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            }
+            
+            else {
+                interaction.reply(`You can't use this command here`);
+            }
         }
     }
 
@@ -191,8 +203,15 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         }
 
         else {
-            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : Yugen Etudes, Yugen Resources, Playground Server`);
-            interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : ${study_channel_error}`);
+            
+            if (interaction.guild?.id === yugen_guild) {
+                interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            }
+            
+            else {
+                interaction.reply(`You can't use this command here`);
+            }
         }
     }
 
@@ -203,8 +222,15 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         }
 
         else {
-            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : Yugen Etudes, Yugen Resources, Playground Server`);
-            interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : ${study_channel_error}`);
+            
+            if (interaction.guild?.id === yugen_guild) {
+                interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_etudes)?.toString()} or ${interaction.guild?.channels.cache.get(yugen_resources)?.toString()}`);
+            }
+            
+            else {
+                interaction.reply(`You can't use this command here`);
+            }
         }
     }
 
@@ -222,25 +248,39 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
     // memes command
     else if (commandName === "memes") {
         console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-        if (!interaction.inGuild() || interaction.channel?.id === yugen_memes || interaction.guild?.id === playground_guild_id) {
+        if (!interaction.inGuild() || interaction.guild?.id !== yugen_guild || interaction.channel?.id === yugen_memes) {
             command_memes(interaction);
         }
 
         else {
-            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : Yugen Memes, Playground Server`);
-            interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_memes)?.toString()}`);
+            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : ${meme_channel_error}`);
+
+            if (interaction.guild?.id === yugen_guild) {
+                interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_memes)?.toString()}`);
+            }
+
+            else {
+                interaction.reply(`You can't use this command here`);
+            }
         }
     }
 
     // xkcd command
     else if (commandName === "xkcd") {
-        if (!interaction.inGuild() || interaction.channel?.id === yugen_xkcd || interaction.guild?.id === playground_guild_id) {
+        if (!interaction.inGuild() || interaction.guild?.id !== yugen_guild || interaction.channel?.id === yugen_xkcd) {
             command_xkcd(interaction);
         }
 
         else {
-            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : Yugen XKCD, Playground Server`);
-            interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_xkcd)?.toString()}`);
+            console.log(`ERROR : Cannot use this command in that channel.\nAUTHORIZED CHANNELS : ${xkcd_channel_error}`);
+            
+            if (interaction.guild?.id === yugen_guild) {
+                interaction.reply(`You can't use this command in this Channel, try posting it in ${interaction.guild?.channels.cache.get(yugen_xkcd)?.toString()}`);
+            }
+
+            else {
+                interaction.reply(`You can't use this command here`);
+            }
         }
     }
 });
