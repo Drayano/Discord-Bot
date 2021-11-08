@@ -305,6 +305,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 
     // translate command
     else if (commandName === "translate") {
+        console.log(`with '${options.get("target")?.value?.toString()}' '${options.get("input")?.value?.toString()}'`);
         command_translate(interaction);
     }
 });

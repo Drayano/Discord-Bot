@@ -234,6 +234,7 @@ discord_client.on("interactionCreate", async (interaction) => {
         }
     }
     else if (commandName === "translate") {
+        console.log(`with '${options.get("target")?.value?.toString()}' '${options.get("input")?.value?.toString()}'`);
         command_translate(interaction);
     }
 });
