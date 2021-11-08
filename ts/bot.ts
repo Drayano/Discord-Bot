@@ -13,6 +13,7 @@ import { command_code } from "./Commands/code.js";
 import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
 import { command_xkcd } from "./Commands/xkcd.js";
+import { command_translate } from "./Commands/translate.js";
 
 dotenv.config();
 
@@ -97,6 +98,24 @@ const commands: CommandInterface[] = [
     {
         name: "xkcd",
         description: "Post a random XKCD"
+    },
+    {
+        name: "translate",
+        description: "Translate the input text",
+        options: [
+            {
+                name: "target",
+                description: "Language to translate to",
+                required: true,
+                type: 3 // String
+            },
+            {
+                name: "input",
+                description: "Text to translate",
+                required: true,
+                type: 3 // String
+            }
+        ]
     }
 ];
 
@@ -150,7 +169,7 @@ discord_client.once("ready", () => {
         }]
     });
 
-    console.log(`${discord_client.user?.tag} status set to "WATCHING USTO"`);
+    console.log(`${discord_client.user?.tag} status set to "WATCHING GERMANY"`);
 });
 
 // Slash (/) commands handling
@@ -282,6 +301,11 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
                 interaction.reply(`You can't use this command here`);
             }
         }
+    }
+
+    // translate command
+    else if (commandName === "translate") {
+        command_translate(interaction);
     }
 });
 
