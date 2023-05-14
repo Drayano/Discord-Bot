@@ -1,4 +1,4 @@
-import { Client, Interaction, MessageEmbed } from "discord.js";
+import { Client, Interaction, EmbedBuilder } from "discord.js";
 
 export async function command_help(discord_client: Client, interaction: Interaction) {
     if (!interaction.isCommand()) {
@@ -13,7 +13,7 @@ export async function command_help(discord_client: Client, interaction: Interact
 
     if (interaction.guild?.id === yugen_guild) {
         // Create an Embed with a Title and Description
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT on ${interaction.guild?.name} : \n
             /code : Shows the link to the Bot source code \n
@@ -32,7 +32,7 @@ export async function command_help(discord_client: Client, interaction: Interact
 
     else if (!interaction.inGuild()) {
         // Create an Embed with a Title and Description
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
             /code : Shows the link to the Bot source code \n
@@ -50,7 +50,7 @@ export async function command_help(discord_client: Client, interaction: Interact
 
     else {
         // Create an Embed with a Title and Description
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT on ${interaction.guild?.name} : \n
             /code : Shows the link to the Bot source code \n

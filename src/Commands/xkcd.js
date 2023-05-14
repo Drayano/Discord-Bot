@@ -1,4 +1,4 @@
-import { MessageAttachment, MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -14,12 +14,11 @@ export async function command_xkcd(interaction) {
         fetch(`https://xkcd.com/${comic_number}/info.0.json`)
             .then((res) => res.json())
             .then((result) => {
-            const attachment = new MessageAttachment(result.img, `xkcd_${comic_number}.png`);
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`XKCD #${comic_number}`)
-                .setImage(`attachment://xkcd_${comic_number}.png`)
-                .setFooter(result.alt);
-            interaction.reply({ embeds: [embed], files: [attachment] });
+                .setImage(result.img)
+                .setFooter({ text: result.alt });
+            interaction.reply({ embeds: [embed] });
         });
     });
 }

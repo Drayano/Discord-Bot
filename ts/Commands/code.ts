@@ -1,4 +1,4 @@
-import { Interaction, MessageEmbed } from "discord.js";
+import { Interaction, EmbedBuilder } from "discord.js";
 
 export async function command_code(interaction: Interaction) {
     if (!interaction.isCommand()) {
@@ -6,7 +6,7 @@ export async function command_code(interaction: Interaction) {
     }
 
     // Create an Embed with a Title and Description
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle("Bot Source Code")
         .setDescription(`The bot source code is available on Github at this address : https://github.com/Drayano/Discord-Bot`);
 

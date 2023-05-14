@@ -1,4 +1,4 @@
-import { Interaction, MessageAttachment } from "discord.js";
+import { Interaction } from "discord.js";
 
 export async function command_spongebob(interaction: Interaction) {
     if (!interaction.isCommand()) {

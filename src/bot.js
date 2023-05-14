@@ -1,6 +1,6 @@
-import { Client, Intents } from "discord.js";
+import { Client, GatewayIntentBits, Partials, ChannelType } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v9";
+import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
 import * as https from 'https';
 import { command_help } from "./Commands/help.js";
@@ -12,14 +12,14 @@ import { command_translate } from "./Commands/translate.js";
 dotenv.config();
 const discord_client = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions
     ],
     partials: [
-        "CHANNEL"
+        Partials.Channel
     ]
 });
 const commands = [
@@ -98,7 +98,7 @@ const yugen_memes = process.env.YUGEN_CHANNEL_ID_MEMES;
 const yugen_xkcd = process.env.YUGEN_CHANNEL_ID_XKCD;
 const meme_channel_error = "Yugen Memes, Playground Server";
 const xkcd_channel_error = "Yugen XKCD, Playground Server";
-const rest = new REST({ version: '9' }).setToken(discord_token);
+const rest = new REST({ version: '10' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
@@ -114,18 +114,17 @@ discord_client.once("ready", () => {
     discord_client.user?.setPresence({
         status: "online",
         activities: [{
-                type: "WATCHING",
-                name: "GERMANY"
+                name: "DrayaBOT"
             }]
     });
-    console.log(`${discord_client.user?.tag} status set to "WATCHING GERMANY"`);
+    console.log(`${discord_client.user?.tag} status set to "DrayaBOT"`);
 });
 discord_client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
         return;
     }
     const { commandName, options } = interaction;
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
+    if (interaction.inGuild() && interaction.channel?.type === ChannelType.GuildText) {
         console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
     }
     else {
@@ -176,7 +175,7 @@ discord_client.on("interactionCreate", async (interaction) => {
     }
 });
 discord_client.on("messageCreate", (message) => {
-    if (message.channel.type === "DM") {
+    if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         let text = message.content;
         text = text.replace(/[^0-9\s]/g, "");

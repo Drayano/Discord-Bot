@@ -1,4 +1,4 @@
-import { Interaction, MessageAttachment, MessageEmbed } from "discord.js";
+import { Interaction, AttachmentBuilder, EmbedBuilder } from "discord.js";
 
 // Generate a random number
 function getRandomInt(max: number): number {
@@ -25,14 +25,15 @@ export async function command_xkcd(interaction: Interaction) {
                 .then((result: any) => {
                     // Attach the Image link then
                     // Create an Embed with a Title and Alt message as footer
-                    const attachment: MessageAttachment = new MessageAttachment(result.img, `xkcd_${comic_number}.png`);
-                    const embed: MessageEmbed = new MessageEmbed()
+                    // const attachment: AttachmentBuilder = new AttachmentBuilder(result.img, { name: `xkcd_${comic_number}.png`});
+                    const embed: EmbedBuilder = new EmbedBuilder()
                         .setTitle(`XKCD #${comic_number}`)
-                        .setImage(`attachment://xkcd_${comic_number}.png`)
-                        .setFooter(result.alt);
+                        // .setImage(`attachment://xkcd_${comic_number}.png`)
+                        .setImage(result.img)
+                        .setFooter({ text: result.alt });
 
                     // Reply with the Embed and the Attachement
-                    interaction.reply({ embeds: [embed], files: [attachment] });
+                    interaction.reply({ embeds: [embed] });
                 });
         })
 }

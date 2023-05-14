@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 export async function command_help(discord_client, interaction) {
     if (!interaction.isCommand()) {
         return;
@@ -9,7 +9,7 @@ export async function command_help(discord_client, interaction) {
     const yugen_memes = process.env.YUGEN_CHANNEL_ID_MEMES;
     const yugen_xkcd = process.env.YUGEN_CHANNEL_ID_XKCD;
     if (interaction.guild?.id === yugen_guild) {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT on ${interaction.guild?.name} : \n
             /code : Shows the link to the Bot source code \n
@@ -24,7 +24,7 @@ export async function command_help(discord_client, interaction) {
         await interaction.reply({ embeds: [embed] });
     }
     else if (!interaction.inGuild()) {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
             /code : Shows the link to the Bot source code \n
@@ -38,7 +38,7 @@ export async function command_help(discord_client, interaction) {
         await interaction.reply({ embeds: [embed] });
     }
     else {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT on ${interaction.guild?.name} : \n
             /code : Shows the link to the Bot source code \n

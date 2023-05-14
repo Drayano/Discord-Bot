@@ -1,6 +1,7 @@
-import { Client, Intents, Interaction, Message, MessageAttachment, MessageEmbed, User } from "discord.js";
+// @ts-nocheck
+import { Client, GatewayIntentBits, Partials, Interaction, Message, AttachmentBuilder, EmbedBuilder, User, Embed, ChannelType } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v9";
+import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
 
 import * as https from 'https'; 
@@ -16,15 +17,15 @@ dotenv.config();
 
 const discord_client: Client = new Client({ 
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions
     ],
     
     partials: [
-        "CHANNEL"
+        Partials.Channel
     ]
 });
 
@@ -114,7 +115,7 @@ const yugen_xkcd: string = process.env.YUGEN_CHANNEL_ID_XKCD;
 const meme_channel_error: string = "Yugen Memes, Playground Server";
 const xkcd_channel_error: string = "Yugen XKCD, Playground Server"
 
-const rest: REST = new REST({ version: '9' }).setToken(discord_token);
+const rest: REST = new REST({ version: '10' }).setToken(discord_token);
 
 (async () => {
 	try {
@@ -143,12 +144,11 @@ discord_client.once("ready", () => {
     discord_client.user?.setPresence({
         status: "online",  // You can show online, idle....
         activities: [{
-            type: "WATCHING",
-            name: "GERMANY"
+            name: "DrayaBOT"
         }]
     });
 
-    console.log(`${discord_client.user?.tag} status set to "WATCHING GERMANY"`);
+    console.log(`${discord_client.user?.tag} status set to "DrayaBOT"`);
 });
 
 // Slash (/) commands handling
@@ -161,7 +161,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 
     // Check if the interaction is happening in a discord server,
     // If the Channel is a Text Channel (i.e : not a voice, thread or news channel) (to get channel.name)
-    if (interaction.inGuild() && interaction.channel?.isText() && interaction.channel.type === "GUILD_TEXT") {
+    if (interaction.inGuild() && interaction.channel?.type === ChannelType.GuildText) {
         console.log(`${interaction.user.tag} in ${interaction.channel?.name} in ${interaction.guild?.name} : used the ${commandName} command`);
     }
 
@@ -235,7 +235,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 // Messages handling
 discord_client.on("messageCreate", (message: Message) => {
     // Check if the message is sent in a discord DM
-    if (message.channel.type === "DM") {
+    if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         
         // Get the mentions IDs and use them to find out the named of who's being mentioned
@@ -306,7 +306,7 @@ discord_client.on("messageCreate", (message: Message) => {
 
         // Print embeds if there are any
         if (message.embeds.length > 0) {
-            message.embeds.forEach((embed: MessageEmbed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+            message.embeds.forEach((embed: Embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
         }
     }
     
