@@ -31,6 +31,6 @@ export async function command_spongebob(interaction: Interaction) {
         spongebob = "ERROR : No text provided";
     }
 
-    // Replty with the spongebobified text and a gif of spongebob
+    // Replty with the spongebobified text
     await interaction.reply({ content: spongebob });
 }

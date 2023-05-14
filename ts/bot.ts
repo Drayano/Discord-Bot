@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Client, GatewayIntentBits, Partials, Interaction, Message, AttachmentBuilder, EmbedBuilder, User, Embed, ChannelType } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
@@ -105,15 +104,15 @@ const commands: CommandInterface[] = [
     }
 ];
 
-const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 const yugen_guild: string = process.env.GUILD_ID_YUGEN;
 const yugen_memes: string = process.env.YUGEN_CHANNEL_ID_MEMES;
 const yugen_xkcd: string = process.env.YUGEN_CHANNEL_ID_XKCD;
 
 const meme_channel_error: string = "Yugen Memes, Playground Server";
-const xkcd_channel_error: string = "Yugen XKCD, Playground Server"
+const xkcd_channel_error: string = "Yugen XKCD, Playground Server";
 
 const rest: REST = new REST({ version: '10' }).setToken(discord_token);
 
@@ -123,9 +122,9 @@ const rest: REST = new REST({ version: '10' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			Routes.applicationGuildCommands(client_id, playground_guild_id),
+			// Routes.applicationGuildCommands(client_id, playground_guild_id),
             // This is for production
-            // Routes.applicationCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
