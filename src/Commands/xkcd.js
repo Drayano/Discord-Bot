@@ -1,5 +1,4 @@
 import { MessageAttachment, MessageEmbed } from "discord.js";
-import fetch from "node-fetch";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }

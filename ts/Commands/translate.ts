@@ -1,5 +1,4 @@
 import { Interaction } from "discord.js";
-import fetch, { Response } from "node-fetch";
 
 export async function command_translate(interaction: Interaction): Promise<void> {
     if (!interaction.isCommand()) {
@@ -36,7 +35,7 @@ export async function command_translate(interaction: Interaction): Promise<void>
         }),
         headers: { "Content-Type": "application/json" }
     })
-    .then((res: Response) => res.json())
+    .then((res: any) => res.json())
     .then((response: any) => {
         // Input language found
         source_language = response[0].language;
@@ -51,7 +50,7 @@ export async function command_translate(interaction: Interaction): Promise<void>
             }),
             headers: { "Content-Type": "application/json" }
         })
-        .then((res: Response) => res.json())
+        .then((res: any) => res.json())
         .then((response: any) => {
             // Reply with the translated text
             interaction.reply(response.translatedText);

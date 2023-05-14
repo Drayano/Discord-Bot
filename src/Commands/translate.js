@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 export async function command_translate(interaction) {
     if (!interaction.isCommand()) {
         return;

@@ -1,5 +1,4 @@
 import { Interaction, MessageAttachment, MessageEmbed } from "discord.js";
-import fetch, { Response } from "node-fetch";
 
 // Generate a random number
 function getRandomInt(max: number): number {
@@ -13,7 +12,7 @@ export async function command_xkcd(interaction: Interaction) {
 
     // Fetch the latest XKCD Number
     fetch("https://xkcd.com/info.0.json")
-        .then((res: Response) => res.json())
+        .then((res: any) => res.json())
         .then((result: any) => {
             // Get current latest XKCD Number and use it to generate a random number
             // 0 < comic_number < latest
@@ -22,7 +21,7 @@ export async function command_xkcd(interaction: Interaction) {
 
             // Fetch a random XKCD
             fetch(`https://xkcd.com/${comic_number}/info.0.json`)
-                .then((res: Response) => res.json())
+                .then((res: any) => res.json())
                 .then((result: any) => {
                     // Attach the Image link then
                     // Create an Embed with a Title and Alt message as footer

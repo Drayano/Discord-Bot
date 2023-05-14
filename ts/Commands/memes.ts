@@ -1,5 +1,4 @@
 import { Interaction } from "discord.js";
-import fetch, { Response } from "node-fetch";
 
 export async function command_memes(interaction: Interaction): Promise<void> {
     if (!interaction.isCommand()) {
@@ -14,7 +13,7 @@ export async function command_memes(interaction: Interaction): Promise<void> {
 
     // Fetch the memes list
     fetch("https://api.imgflip.com/get_memes")
-        .then((res: Response) => res.json())
+        .then((res: any) => res.json())
         .then((result: any) => {
             // Loop through the result looking for a match
             const memes: string[] = result.data.memes;
@@ -48,7 +47,7 @@ export async function command_memes(interaction: Interaction): Promise<void> {
 
                 // Send an HTTP POST request with the necessary informations to make the meme
                 fetch(`https://api.imgflip.com/caption_image?template_id=${params.template_id}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`)
-                    .then((res: Response) => res.json())
+                    .then((res: any) => res.json())
                     .then((result: any) => {
                         // Reply with the captioned meme
                         interaction.reply(result.data.url);
