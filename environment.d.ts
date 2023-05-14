@@ -11,9 +11,6 @@ declare global {
         YUGEN_CHANNEL_ID_RESOURCES: string,
         YUGEN_CHANNEL_ID_MEMES: string,
         YUGEN_CHANNEL_ID_XKCD: string,
-        MEGA_DRIVE_SID: string,
-        EMPLOIS_SID: string,
-        EMPLOIS_IA: string,
         IMGFLIP_USERNAME: string,
         IMGFLIP_PASSWORD: string
       }

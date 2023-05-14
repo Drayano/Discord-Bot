@@ -16,9 +16,6 @@ export async function command_help(discord_client: Client, interaction: Interact
         const embed = new MessageEmbed()
             .setTitle(`${discord_client.user?.username} BOT Help`)
             .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT on ${interaction.guild?.name} : \n
-            /emplois_sid : Shows the schedule for SID. Channels : ${interaction.guild?.channels.cache.get(yugen_etudes)} or ${interaction.guild?.channels.cache.get(yugen_resources)} \n
-            /emplois_ia : Shows the schedule for IA. Channels : ${interaction.guild?.channels.cache.get(yugen_etudes)} or ${interaction.guild?.channels.cache.get(yugen_resources)} \n
-            /drive : Shows the Mega Drive link for SID. Channels : ${interaction.guild?.channels.cache.get(yugen_etudes)} or ${interaction.guild?.channels.cache.get(yugen_resources)} \n
             /code : Shows the link to the Bot source code \n
             /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE \n
             /xkcd : Post a random XKCD Comic. Channel : ${interaction.guild?.channels.cache.get(yugen_xkcd)} \n
