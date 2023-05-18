@@ -17,20 +17,20 @@ const discord_client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageReactions
+        GatewayIntentBits.DirectMessageReactions,
     ],
     partials: [
-        Partials.Channel
+        Partials.Channel,
     ]
 });
 const commands = [
     {
         name: "help",
-        description: "Shows the list of commands available"
+        description: "Shows the list of commands available",
     },
     {
         name: "code",
-        description: "Bot Source Code"
+        description: "Bot Source Code",
     },
     {
         name: "spongebob",
@@ -40,9 +40,9 @@ const commands = [
                 name: "input",
                 description: "Text to transform",
                 required: true,
-                type: 3
-            }
-        ]
+                type: 3,
+            },
+        ],
     },
     {
         name: "memes",
@@ -52,25 +52,25 @@ const commands = [
                 name: "input",
                 description: "Choose a meme template",
                 required: true,
-                type: 3
+                type: 3,
             },
             {
                 name: "first_line",
                 description: "First Meme Line",
                 required: true,
-                type: 3
+                type: 3,
             },
             {
                 name: "second_line",
                 description: "Second Meme Line",
                 required: true,
-                type: 3
-            }
-        ]
+                type: 3,
+            },
+        ],
     },
     {
         name: "xkcd",
-        description: "Post a random XKCD"
+        description: "Post a random XKCD",
     },
     {
         name: "translate",
@@ -80,15 +80,15 @@ const commands = [
                 name: "target",
                 description: "Language to translate to",
                 required: true,
-                type: 3
+                type: 3,
             },
             {
                 name: "input",
                 description: "Text to translate",
                 required: true,
-                type: 3
-            }
-        ]
+                type: 3,
+            },
+        ],
     },
     {
         name: "pokedex",
@@ -98,25 +98,25 @@ const commands = [
                 name: "input",
                 description: "Content you want to search : Pokemon, Move or Item",
                 required: true,
-                type: 3
+                type: 3,
             },
             {
                 name: "value",
                 description: "The name of the content your want to search",
                 required: true,
-                type: 3
-            }
-        ]
-    }
+                type: 3,
+            },
+        ],
+    },
 ];
-const discord_token = process.env.DISCORDJS_BOT_TOKEN;
-const client_id = process.env.DISCORDJS_BOT_ID;
+const discord_token = process.env.DISCORDJS_TESTBOT_TOKEN;
+const client_id = process.env.DISCORDJS_TESTBOT_ID;
 const playground_guild_id = process.env.GUILD_ID_PLAYGROUND;
 const rest = new REST({ version: '10' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationCommands(client_id), { body: commands });
+        await rest.put(Routes.applicationGuildCommands(client_id, playground_guild_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {

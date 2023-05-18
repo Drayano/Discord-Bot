@@ -15,7 +15,7 @@ export async function command_xkcd(interaction) {
             .then((res) => res.json())
             .then((result) => {
             const embed = new EmbedBuilder()
-                .setTitle(`XKCD #${comic_number}`)
+                .setTitle(`XKCD #${result.num}`)
                 .setImage(result.img)
                 .setFooter({ text: result.alt });
             interaction.reply({ embeds: [embed] });

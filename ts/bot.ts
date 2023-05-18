@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Partials, Interaction, Message, User, Embed, ChannelType } from "discord.js";
+import { Client, GatewayIntentBits, Partials, Interaction, Message, User, Embed, ChannelType, Collection, Attachment } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
@@ -21,11 +21,11 @@ const discord_client: Client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageReactions
+        GatewayIntentBits.DirectMessageReactions,
     ],
     
     partials: [
-        Partials.Channel
+        Partials.Channel,
     ]
 });
 
@@ -33,17 +33,22 @@ const discord_client: Client = new Client({
 interface CommandInterface {
     name: string,
     description: string,
-    options?: { name: string, description: string, type: number, required?: boolean }[]
+    options?: { 
+        name: string, 
+        description: string,
+        type: number,
+        required?: boolean
+    }[],
 }
 
 const commands: CommandInterface[] = [
     {
         name: "help",
-        description: "Shows the list of commands available"
+        description: "Shows the list of commands available",
     },
     {
         name: "code",
-        description: "Bot Source Code"
+        description: "Bot Source Code",
     },
     {
         name: "spongebob",
@@ -53,9 +58,9 @@ const commands: CommandInterface[] = [
                 name: "input",
                 description: "Text to transform",
                 required: true,
-                type: 3 // String
-            }
-        ]
+                type: 3, // String
+            },
+        ],
     },
     {
         name: "memes",
@@ -65,25 +70,25 @@ const commands: CommandInterface[] = [
                 name: "input",
                 description: "Choose a meme template",
                 required: true,
-                type: 3 // String
+                type: 3, // String
             },
             {
                 name: "first_line",
                 description: "First Meme Line",
                 required: true,
-                type: 3 // String
+                type: 3, // String
             },
             {
                 name: "second_line",
                 description: "Second Meme Line",
                 required: true,
-                type: 3 // String
-            }
-        ]
+                type: 3, // String
+            },
+        ],
     },
     {
         name: "xkcd",
-        description: "Post a random XKCD"
+        description: "Post a random XKCD",
     },
     {
         name: "translate",
@@ -93,15 +98,15 @@ const commands: CommandInterface[] = [
                 name: "target",
                 description: "Language to translate to",
                 required: true,
-                type: 3 // String
+                type: 3, // String
             },
             {
                 name: "input",
                 description: "Text to translate",
                 required: true,
-                type: 3 // String
-            }
-        ]
+                type: 3, // String
+            },
+        ],
     },
     {
         name: "pokedex",
@@ -111,20 +116,20 @@ const commands: CommandInterface[] = [
                 name: "input",
                 description: "Content you want to search : Pokemon, Move or Item",
                 required: true,
-                type: 3 // String
+                type: 3, // String
             },
             {
                 name: "value",
                 description: "The name of the content your want to search",
                 required: true,
-                type: 3 // String
-            }
-        ]
-    }
+                type: 3, // String
+            },
+        ],
+    },
 ];
 
-const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_BOT_ID;
+const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
 const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 
 const rest: REST = new REST({ version: '10' }).setToken(discord_token);
@@ -135,9 +140,9 @@ const rest: REST = new REST({ version: '10' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			// Routes.applicationGuildCommands(client_id, playground_guild_id),
+			Routes.applicationGuildCommands(client_id, playground_guild_id),
             // This is for production
-            Routes.applicationCommands(client_id),
+            // Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
