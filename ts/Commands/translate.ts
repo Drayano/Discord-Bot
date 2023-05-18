@@ -1,4 +1,5 @@
 import { Interaction } from "discord.js";
+import { translate } from '@vitalets/google-translate-api';
 
 export async function command_translate(interaction: Interaction): Promise<void> {
     if (!interaction.isCommand()) {
@@ -7,53 +8,38 @@ export async function command_translate(interaction: Interaction): Promise<void>
 
     const { options } = interaction;
 
-    let source_language: string = ""
     let target_language: string = options.get("target")?.value?.toString()!;
+    let provided_text: string = options.get("input")?.value?.toString()!;
 
     // Handle some common misspellings
     if (target_language === "deutsch" || target_language === "allemand" || target_language === "german") {
-        target_language = "de"
+        target_language = "de";
     }
 
     else if (target_language === "français" || target_language === "francais" || target_language === "french") {
-        target_language = "fr"
+        target_language = "fr";
     }
 
     else if (target_language === "english" || target_language === "anglais") {
-        target_language = "en"
+        target_language = "en";
     }
 
     else if (target_language === "español" || target_language === "espanol" || target_language === "espagnol" || target_language === "spanish") {
-        target_language = "es"
+        target_language = "es";
     }
 
-    // Try to detect the input text language
-    fetch("https://libretranslate.de/detect", {
-        method: "POST",
-        body: JSON.stringify({
-            q: options.get("input")?.value?.toString()
-        }),
-        headers: { "Content-Type": "application/json" }
-    })
-    .then((res: any) => res.json())
-    .then((response: any) => {
-        // Input language found
-        source_language = response[0].language;
+    else if (target_language === "japanese" || target_language === "japonais" || target_language === "jp") {
+        target_language = "ja";
+    }
 
-        // Send a translation request
-        fetch("https://libretranslate.de/translate", {
-            method: "POST",
-            body: JSON.stringify({
-                q: options.get("input")?.value?.toString(),
-                source: source_language,
-                target: target_language
-            }),
-            headers: { "Content-Type": "application/json" }
-        })
-        .then((res: any) => res.json())
-        .then((response: any) => {
-            // Reply with the translated text
-            interaction.reply(response.translatedText);
-        });
-    });
+    else if (target_language === "chinese" || target_language === "chinois" || target_language === "mandarin" || target_language === "cn" || target_language === "zn" || target_language === "ch") {
+        target_language = "zh";
+    }
+
+    else if (target_language === "arabic" || target_language === "arabe" || target_language === "ara") {
+        target_language = "ar";
+    }
+
+    const { text } = await translate(provided_text, { to: `${target_language}` });
+    interaction.reply(text);
 }
