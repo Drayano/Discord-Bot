@@ -14,15 +14,15 @@ export async function command_pokedex(interaction) {
             .then((res) => res.json())
             .then((result) => {
             let types = "Type(s) : ";
-            if (result["types"]["1"] !== undefined) {
-                types += `${capitalizeFirstLetter(result["types"]["0"]["type"]["name"].toString())} / ${capitalizeFirstLetter(result["types"]["1"]["type"]["name"].toString())}`;
+            if (result.types[1] !== undefined) {
+                types += `${capitalizeFirstLetter(result.types[0].type.name.toString())} / ${capitalizeFirstLetter(result.types[1].type.name.toString())}`;
             }
             else {
-                types += `${capitalizeFirstLetter(result["types"]["0"]["type"]["name"].toString())}`;
+                types += `${capitalizeFirstLetter(result.types[0].type.name.toString())}`;
             }
             const embed = new EmbedBuilder()
-                .setTitle(`Pokemon #${result.id} - ${capitalizeFirstLetter(result["forms"]["0"]["name"].toString())}`)
-                .setImage(result.sprites.front_default)
+                .setTitle(`Pokemon #${result.id} - ${capitalizeFirstLetter(result.name.toString())}`)
+                .setImage(result.sprites.other["official-artwork"].front_default)
                 .setFooter({ text: `${types}` });
             interaction.reply({ embeds: [embed] });
         });
