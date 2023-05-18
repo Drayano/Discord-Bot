@@ -109,14 +109,14 @@ const commands = [
         ],
     },
 ];
-const discord_token = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token = process.env.DISCORDJS_BOT_TOKEN;
+const client_id = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id = process.env.GUILD_ID_PLAYGROUND;
 const rest = new REST({ version: '10' }).setToken(discord_token);
 (async () => {
     try {
         console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationGuildCommands(client_id, playground_guild_id), { body: commands });
+        await rest.put(Routes.applicationCommands(client_id), { body: commands });
         console.log('Successfully reloaded application (/) commands.');
     }
     catch (error) {

@@ -138,8 +138,8 @@ const commands: CommandInterface[] = [
     },
 ];
 
-const discord_token: string = process.env.DISCORDJS_TESTBOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_TESTBOT_ID;
+const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
+const client_id: string = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
 
 const rest: REST = new REST({ version: '10' }).setToken(discord_token);
@@ -150,9 +150,9 @@ const rest: REST = new REST({ version: '10' }).setToken(discord_token);
 
 		await rest.put(
             // This is for testing purposes
-			Routes.applicationGuildCommands(client_id, playground_guild_id),
+			// Routes.applicationGuildCommands(client_id, playground_guild_id),
             // This is for production
-            // Routes.applicationCommands(client_id),
+            Routes.applicationCommands(client_id),
 			{ body: commands },
 		);
 
