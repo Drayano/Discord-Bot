@@ -1,4 +1,3 @@
-// TODO : Use another translation service as this one seems down
 import { Interaction } from "discord.js";
 
 export async function command_translate(interaction: Interaction): Promise<void> {

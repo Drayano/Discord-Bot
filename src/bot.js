@@ -9,6 +9,7 @@ import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
 import { command_xkcd } from "./Commands/xkcd.js";
 import { command_translate } from "./Commands/translate.js";
+import { command_pokedex } from "./Commands/pokedex.js";
 dotenv.config();
 const discord_client = new Client({
     intents: [
@@ -88,6 +89,24 @@ const commands = [
                 type: 3
             }
         ]
+    },
+    {
+        name: "pokedex",
+        description: "Infos about Pokemons, Moves and Items",
+        options: [
+            {
+                name: "input",
+                description: "Content you want to search : Pokemon, Move or Item",
+                required: true,
+                type: 3
+            },
+            {
+                name: "value",
+                description: "The name of the content your want to search",
+                required: true,
+                type: 3
+            }
+        ]
     }
 ];
 const discord_token = process.env.DISCORDJS_BOT_TOKEN;
@@ -146,62 +165,49 @@ discord_client.on("interactionCreate", async (interaction) => {
         console.log(`with '${options.get("target")?.value?.toString()}' '${options.get("input")?.value?.toString()}'`);
         command_translate(interaction);
     }
+    else if (commandName === "pokedex") {
+        console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("value")?.value?.toString()}'`);
+        command_pokedex(interaction);
+    }
 });
 discord_client.on("messageCreate", (message) => {
     if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
-        let text = message.content;
-        text = text.replace(/[^0-9\s]/g, "");
-        const arr = text.split(" ");
-        arr.forEach((id) => {
-            if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
-            }
-        });
-        let emoji = message.content;
-        emoji = emoji.replace(/[^0-9\s]/g, "");
-        const arr1 = emoji.split(" ");
-        arr1.forEach((id) => {
-            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-                const { statusCode } = res;
-                if (statusCode === 200) {
-                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-                }
-            });
-        });
-        message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
-        if (message.embeds.length > 0) {
-            message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
-        }
+        printAdditionalMessageContent(message);
     }
     else {
-        console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
-        let text = message.content;
-        text = text.replace(/[^0-9\s]/g, "");
-        const arr = text.split(" ");
-        arr.forEach((id) => {
-            if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
-            }
-        });
-        let emoji = message.content;
-        emoji = emoji.replace(/[^0-9\s]/g, "");
-        const arr1 = emoji.split(" ");
-        arr1.forEach((id) => {
-            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-                const { statusCode } = res;
-                if (statusCode === 200) {
-                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-                }
-            });
-        });
-        message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
-        if (message.embeds.length > 0) {
-            message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+        if (message.content !== "") {
+            console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
+            printAdditionalMessageContent(message);
         }
     }
     if (message.author.bot) {
         return;
     }
 });
+function printAdditionalMessageContent(message) {
+    let text = message.content;
+    text = text.replace(/[^0-9\s]/g, "");
+    const arr = text.split(" ");
+    arr.forEach((id) => {
+        if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
+            console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
+        }
+    });
+    let emoji = message.content;
+    emoji = emoji.replace(/[^0-9\s]/g, "");
+    const arr1 = emoji.split(" ");
+    arr1.forEach((id) => {
+        https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
+            const { statusCode } = res;
+            if (statusCode === 200) {
+                console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
+            }
+        });
+    });
+    message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
+    if (message.embeds.length > 0) {
+        message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+    }
+}
 discord_client.login(discord_token);

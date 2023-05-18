@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Partials, Interaction, Message, AttachmentBuilder, EmbedBuilder, User, Embed, ChannelType } from "discord.js";
+import { Client, GatewayIntentBits, Partials, Interaction, Message, User, Embed, ChannelType } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
@@ -11,6 +11,7 @@ import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
 import { command_xkcd } from "./Commands/xkcd.js";
 import { command_translate } from "./Commands/translate.js";
+import { command_pokedex } from "./Commands/pokedex.js";
 
 dotenv.config();
 
@@ -97,6 +98,24 @@ const commands: CommandInterface[] = [
             {
                 name: "input",
                 description: "Text to translate",
+                required: true,
+                type: 3 // String
+            }
+        ]
+    },
+    {
+        name: "pokedex",
+        description: "Infos about Pokemons, Moves and Items",
+        options: [
+            {
+                name: "input",
+                description: "Content you want to search : Pokemon, Move or Item",
+                required: true,
+                type: 3 // String
+            },
+            {
+                name: "value",
+                description: "The name of the content your want to search",
                 required: true,
                 type: 3 // String
             }
@@ -195,6 +214,12 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
         console.log(`with '${options.get("target")?.value?.toString()}' '${options.get("input")?.value?.toString()}'`);
         command_translate(interaction);
     }
+
+    // translate command
+    else if (commandName === "pokedex") {
+        console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("value")?.value?.toString()}'`);
+        command_pokedex(interaction);
+    }
 });
 
 // Messages handling
@@ -203,75 +228,15 @@ discord_client.on("messageCreate", (message: Message) => {
     if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         
-        // Get the mentions IDs and use them to find out the named of who's being mentioned
-        let text: string = message.content;
-        text = text.replace(/[^0-9\s]/g, "");
-        const arr: string[] = text.split(" ");
-        arr.forEach((id: string) => {
-            if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`);
-            }
-        });
-
-        // Get the emotes IDs and use them to find out the emote URL
-        let emoji: string = message.content;
-        emoji = emoji.replace(/[^0-9\s]/g, "");
-        
-        const arr1: string[] = emoji.split(" ");
-
-        arr1.forEach((id: string) => {
-            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-                const { statusCode } = res;
-                if (statusCode === 200) { // HTTP 200 = OK
-                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-                } 
-            })   
-        });
-        
-        // Get Attachement files if there are any
-        message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
-
-        // Print embeds if there are any
-        if (message.embeds.length > 0) {
-            message.embeds.forEach((embed: any) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
-        }
+        printAdditionalMessageContent(message);
     }
 
     // The message is being sent in a discord server so we can get (channel.name)
     else {
-        console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
+        if (message.content !== "") {
+            console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
 
-        // Get the mentions IDs and use them to find out the named of who's being mentioned
-        let text: string = message.content;
-        text = text.replace(/[^0-9\s]/g, "");
-        const arr: string[] = text.split(" ");
-        arr.forEach((id: string) => {
-            if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
-                console.log(`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`);
-            }
-        });
-
-        // Get the emotes IDs and use them to find out the emote URL
-        let emoji: string = message.content;
-        emoji = emoji.replace(/[^0-9\s]/g, "");
-        
-        const arr1: string[] = emoji.split(" ");
-
-        arr1.forEach((id: string) => {
-            https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-                const { statusCode } = res;
-                if (statusCode === 200) { // HTTP 200 = OK
-                    console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-                } 
-            })   
-        });
-        
-        // Get Attachement files if there are any
-        message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
-
-        // Print embeds if there are any
-        if (message.embeds.length > 0) {
-            message.embeds.forEach((embed: Embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+            printAdditionalMessageContent(message);
         }
     }
     
@@ -280,6 +245,41 @@ discord_client.on("messageCreate", (message: Message) => {
         return;
     }
 });
+
+function printAdditionalMessageContent(message: Message) {
+    // Get the mentions IDs and use them to find out the named of who's being mentioned
+    let text: string = message.content;
+    text = text.replace(/[^0-9\s]/g, "");
+    const arr: string[] = text.split(" ");
+    arr.forEach((id: string) => {
+        if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
+            console.log(`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`);
+        }
+    });
+
+    // Get the emotes IDs and use them to find out the emote URL
+    let emoji: string = message.content;
+    emoji = emoji.replace(/[^0-9\s]/g, "");
+    
+    const arr1: string[] = emoji.split(" ");
+
+    arr1.forEach((id: string) => {
+        https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
+            const { statusCode } = res;
+            if (statusCode === 200) { // HTTP 200 = OK
+                console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
+            } 
+        })   
+    });
+    
+    // Get Attachement files if there are any
+    message.attachments.each((attachment_item: any) => console.log(`Attached file : ${attachment_item.attachment}`));
+
+    // Print embeds if there are any
+    if (message.embeds.length > 0) {
+        message.embeds.forEach((embed: Embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+    }
+}
 
 // Login to Discord with the token
 discord_client.login(discord_token);
