@@ -1,0 +1,24 @@
+{
+	"root": true,
+	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module",
+		"project": ["./tsconfig.json"]
+	},
+	"plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
+	"rules": {
+		"@typescript-eslint/naming-convention": "warn",
+		"@typescript-eslint/semi": "error",
+		"@typescript-eslint/no-inferrable-types": "off",
+		"tsdoc/syntax": "warn",
+		"array-callback-return": "warn",
+		"no-await-in-loop": "warn",
+		"curly": ["error", "all"],
+		"eqeqeq": "warn",
+		"no-throw-literal": "warn",
+		"semi": "error"
+	},
+	"ignorePatterns": ["out", "dist", "**/*.d.ts"]
+}

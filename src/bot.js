@@ -2,7 +2,7 @@ import { ChannelType, Client, GatewayIntentBits, Partials, } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
-import * as https from 'https';
+import * as https from "https";
 import { command_help } from "./Commands/help.js";
 import { command_code } from "./Commands/code.js";
 import { command_spongebob } from "./Commands/spongebob.js";
@@ -19,9 +19,7 @@ const discord_client = new Client({
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions,
     ],
-    partials: [
-        Partials.Channel,
-    ]
+    partials: [Partials.Channel],
 });
 const commands = [
     {
@@ -112,12 +110,12 @@ const commands = [
 const discord_token = process.env.DISCORDJS_BOT_TOKEN;
 const client_id = process.env.DISCORDJS_BOT_ID;
 const playground_guild_id = process.env.GUILD_ID_PLAYGROUND;
-const rest = new REST({ version: '10' }).setToken(discord_token);
+const rest = new REST({ version: "10" }).setToken(discord_token);
 (async () => {
     try {
-        console.log('Started refreshing application (/) commands.');
+        console.log("Started refreshing application (/) commands.");
         await rest.put(Routes.applicationCommands(client_id), { body: commands });
-        console.log('Successfully reloaded application (/) commands.');
+        console.log("Successfully reloaded application (/) commands.");
     }
     catch (error) {
         console.error(error);
@@ -127,9 +125,11 @@ discord_client.once("ready", () => {
     console.log(`${discord_client.user?.tag} has logged in`);
     discord_client.user?.setPresence({
         status: "online",
-        activities: [{
+        activities: [
+            {
                 name: "DrayaBOT",
-            }],
+            },
+        ],
     });
     console.log(`${discord_client.user?.tag} status set to "DrayaBOT"`);
 });
@@ -155,18 +155,24 @@ discord_client.on("interactionCreate", async (interaction) => {
         command_spongebob(interaction);
     }
     else if (commandName === "memes") {
-        console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("first_line")?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
+        console.log(`with '${options.get("input")?.value?.toString()}' '${options
+            .get("first_line")
+            ?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
         command_memes(interaction);
     }
     else if (commandName === "xkcd") {
         command_xkcd(interaction);
     }
     else if (commandName === "translate") {
-        console.log(`with '${options.get("target")?.value?.toString()}' '${options.get("input")?.value?.toString()}'`);
+        console.log(`with '${options.get("target")?.value?.toString()}' '${options
+            .get("input")
+            ?.value?.toString()}'`);
         command_translate(interaction);
     }
     else if (commandName === "pokedex") {
-        console.log(`with '${options.get("input")?.value?.toString()}' '${options.get("value")?.value?.toString()}'`);
+        console.log(`with '${options.get("input")?.value?.toString()}' '${options
+            .get("value")
+            ?.value?.toString()}'`);
         command_pokedex(interaction);
     }
 });

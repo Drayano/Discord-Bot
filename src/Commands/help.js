@@ -3,8 +3,7 @@ export async function command_help(discord_client, interaction) {
     if (!interaction.isCommand()) {
         return;
     }
-    const embed = new EmbedBuilder()
-        .setTitle(`${discord_client.user?.username} BOT Help`)
+    const embed = new EmbedBuilder().setTitle(`${discord_client.user?.username} BOT Help`)
         .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
         /code : Shows the link to the Bot source code \n
         /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE \n

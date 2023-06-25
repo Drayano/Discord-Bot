@@ -23,7 +23,7 @@ export async function command_memes(interaction) {
                 text0: options.get("first_line")?.value?.toString(),
                 text1: options.get("second_line")?.value?.toString(),
                 username: username,
-                password: password
+                password: password,
             };
             fetch(`https://api.imgflip.com/caption_image?template_id=${params.template_id}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`)
                 .then((res) => res.json())

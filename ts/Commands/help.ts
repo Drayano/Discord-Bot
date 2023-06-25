@@ -1,14 +1,13 @@
 import { Client, Interaction, EmbedBuilder } from "discord.js";
 
 export async function command_help(discord_client: Client, interaction: Interaction) {
-    if (!interaction.isCommand()) {
-        return;
-    }
+	if (!interaction.isCommand()) {
+		return;
+	}
 
-    // Create an Embed with a Title and Description
-    const embed = new EmbedBuilder()
-        .setTitle(`${discord_client.user?.username} BOT Help`)
-        .setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
+	// Create an Embed with a Title and Description
+	const embed = new EmbedBuilder().setTitle(`${discord_client.user?.username} BOT Help`)
+		.setDescription(`These are all the available commands for ${discord_client.user?.username} BOT : \n
         /code : Shows the link to the Bot source code \n
         /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE \n
         /xkcd : Post a random XKCD Comic.\n
@@ -20,6 +19,6 @@ export async function command_help(discord_client: Client, interaction: Interact
         /translate [target] [input] : Translate the input text into the targeted language. 
         Target needs to be in ISO 639-1 form (i.e : fr, en, es, de, ja etc...)`);
 
-    // Reply with the Embed
-    await interaction.reply({ embeds: [embed] });
+	// Reply with the Embed
+	await interaction.reply({ embeds: [embed] });
 }
