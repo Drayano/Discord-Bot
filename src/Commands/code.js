@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-export async function command_code(interaction) {
+export async function commandCode(interaction) {
     if (!interaction.isCommand()) {
         return;
     }

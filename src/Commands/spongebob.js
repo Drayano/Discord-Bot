@@ -1,13 +1,14 @@
-export async function command_spongebob(interaction) {
+export async function commandSpongebob(interaction) {
     if (!interaction.isCommand()) {
         return;
     }
     const { options } = interaction;
     let text = "";
     let spongebob = "";
-    if (options.get("input")?.value?.toString().length !== undefined) {
-        for (let i = 0; i < options.get("input")?.value?.toString().length; i++) {
-            text = options.get("input")?.value?.toString();
+    const argumentLength = options.get("input")?.value?.toString().length;
+    if (argumentLength !== undefined) {
+        for (let i = 0; i < argumentLength; i++) {
+            text = options.get("input")?.value?.toString() ?? "";
             if (i % 2 === 0) {
                 spongebob += text.charAt(i).toLowerCase();
             }

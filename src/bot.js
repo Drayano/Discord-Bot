@@ -4,12 +4,12 @@ import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
 import * as https from "https";
 import { commandHelp } from "./Commands/help.js";
-import { command_code } from "./Commands/code.js";
-import { command_spongebob } from "./Commands/spongebob.js";
-import { command_memes } from "./Commands/memes.js";
-import { command_xkcd } from "./Commands/xkcd.js";
-import { command_translate } from "./Commands/translate.js";
-import { command_pokedex } from "./Commands/pokedex.js";
+import { commandCode } from "./Commands/code.js";
+import { commandSpongebob } from "./Commands/spongebob.js";
+import { commandMemes } from "./Commands/memes.js";
+import { commandXkcd } from "./Commands/xkcd.js";
+import { commandTranslate } from "./Commands/translate.js";
+import { commandPokedex } from "./Commands/pokedex.js";
 import { commandMinecraft } from "./Commands/minecraft.js";
 dotenv.config();
 const DISCORD_CLIENT = new Client({
@@ -153,35 +153,35 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
         commandHelp(DISCORD_CLIENT, interaction);
     }
     else if (commandName === "code") {
-        command_code(interaction);
+        commandCode(interaction);
     }
     else if (commandName === "spongebob") {
         console.log(`with '${options.get("input")?.value?.toString()}'`);
-        command_spongebob(interaction);
+        commandSpongebob(interaction);
     }
     else if (commandName === "memes") {
         console.log(`with '${options.get("input")?.value?.toString()}' '${options
             .get("first_line")
             ?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`);
-        command_memes(interaction);
+        commandMemes(interaction);
     }
     else if (commandName === "xkcd") {
-        command_xkcd(interaction);
+        commandXkcd(interaction);
     }
     else if (commandName === "translate") {
         console.log(`with '${options.get("target")?.value?.toString()}' '${options
             .get("input")
             ?.value?.toString()}'`);
-        command_translate(interaction);
+        commandTranslate(interaction);
     }
     else if (commandName === "pokedex") {
         console.log(`with '${options.get("input")?.value?.toString()}' '${options
             .get("value")
             ?.value?.toString()}'`);
-        command_pokedex(interaction);
+        commandPokedex(interaction);
     }
     else if (commandName === "minecraft") {
-        commandMinecraft(DISCORD_CLIENT, interaction);
+        commandMinecraft(interaction);
     }
 });
 DISCORD_CLIENT.on("messageCreate", (message) => {

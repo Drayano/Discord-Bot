@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
-export async function command_xkcd(interaction) {
+export async function commandXkcd(interaction) {
     if (!interaction.isCommand()) {
         return;
     }
@@ -10,8 +10,8 @@ export async function command_xkcd(interaction) {
         .then((res) => res.json())
         .then((result) => {
         const latest = result.num;
-        const comic_number = getRandomInt(latest) + 1;
-        fetch(`https://xkcd.com/${comic_number}/info.0.json`)
+        const comicNumber = getRandomInt(latest) + 1;
+        fetch(`https://xkcd.com/${comicNumber}/info.0.json`)
             .then((res) => res.json())
             .then((result) => {
             const embed = new EmbedBuilder()

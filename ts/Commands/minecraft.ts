@@ -1,6 +1,6 @@
-import { Client, Interaction } from "discord.js";
+import { Interaction } from "discord.js";
 
-export async function commandMinecraft(discordClient: Client, interaction: Interaction) {
+export async function commandMinecraft(interaction: Interaction) {
 	if (!interaction.isCommand()) {
 		return;
 	}

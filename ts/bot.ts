@@ -257,7 +257,7 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction: Interaction) => {
 
 	// help command
 	else if (commandName === "minecraft") {
-		commandMinecraft(DISCORD_CLIENT, interaction);
+		commandMinecraft(interaction);
 	}
 });
 
