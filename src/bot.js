@@ -1,8 +1,7 @@
-import { ChannelType, Client, GatewayIntentBits, Partials, } from "discord.js";
+import { Client, Partials } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v10";
+import { ChannelType, GatewayIntentBits, Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
-import * as https from "https";
 import { commandHelp } from "./Commands/help.js";
 import { commandCode } from "./Commands/code.js";
 import { commandSpongebob } from "./Commands/spongebob.js";
@@ -11,6 +10,7 @@ import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
 import { commandMinecraft } from "./Commands/minecraft.js";
+import { startMinecraftLogListener } from "./minecraftListener.js";
 dotenv.config();
 const DISCORD_CLIENT = new Client({
     intents: [
@@ -112,14 +112,14 @@ const commands = [
         description: "Check the status of the Minecraft Server",
     },
 ];
-const DISCORD_TOKEN = process.env.DISCORDJS_TESTBOT_TOKEN;
-const CLIENT_ID = process.env.DISCORDJS_TESTBOT_ID;
+const DISCORD_TOKEN = process.env.DISCORDJS_BOT_TOKEN;
+const CLIENT_ID = process.env.DISCORDJS_BOT_ID;
 const PLAYGROUND_GUILD_ID = process.env.GUILD_ID_PLAYGROUND;
 const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 (async () => {
     try {
         console.log("Started refreshing application (/) commands.");
-        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID), { body: commands });
+        await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
         console.log("Successfully reloaded application (/) commands.");
     }
     catch (error) {
@@ -137,6 +137,7 @@ DISCORD_CLIENT.once("ready", () => {
         ],
     });
     console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
+    startMinecraftLogListener(DISCORD_CLIENT);
 });
 DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
@@ -187,41 +188,28 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
 DISCORD_CLIENT.on("messageCreate", (message) => {
     if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
-        printAdditionalMessageContent(message);
     }
     else {
         if (message.content !== "") {
-            console.log(`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`);
-            printAdditionalMessageContent(message);
+            console.log(`${message.author.tag} in #${handleChannelType(message)} in ${message.guild?.name} : ${message.content}`);
         }
     }
     if (message.author.bot) {
         return;
     }
 });
-function printAdditionalMessageContent(message) {
-    let text = message.content;
-    text = text.replace(/[^0-9\s]/g, "");
-    const arr = text.split(" ");
-    arr.forEach((id) => {
-        if (DISCORD_CLIENT.users.cache.find((user) => user.id === id) !== undefined) {
-            console.log(`Tag : ${DISCORD_CLIENT.users.cache.find((user) => user.id === id)?.tag}`);
-        }
-    });
-    let emoji = message.content;
-    emoji = emoji.replace(/[^0-9\s]/g, "");
-    const arr1 = emoji.split(" ");
-    arr1.forEach((id) => {
-        https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-            const { statusCode } = res;
-            if (statusCode === 200) {
-                console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-            }
-        });
-    });
-    message.attachments.each((attachmentItem) => console.log(`Attached file : ${attachmentItem.attachment}`));
-    if (message.embeds.length > 0) {
-        message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
+function handleChannelType(message) {
+    if (message.channel.isTextBased) {
+        return message.channel.isTextBased.name;
+    }
+    else if (message.channel.isThread) {
+        return message.channel.isThread.name;
+    }
+    else if (message.channel.isVoiceBased) {
+        return message.channel.isVoiceBased.name;
+    }
+    else {
+        return "Channel Type Unknown";
     }
 }
 DISCORD_CLIENT.login(DISCORD_TOKEN);

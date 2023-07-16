@@ -1,19 +1,8 @@
-import {
-	ChannelType,
-	Client,
-	Embed,
-	GatewayIntentBits,
-	Interaction,
-	Message,
-	Partials,
-	User,
-} from "discord.js";
-
+import { Client, Interaction, Message, Partials } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v10";
-import dotenv from "dotenv";
+import { ChannelType, GatewayIntentBits, Routes } from "discord-api-types/v10";
 
-import * as https from "https";
+import dotenv from "dotenv";
 
 import { commandHelp } from "./Commands/help.js";
 import { commandCode } from "./Commands/code.js";
@@ -23,6 +12,8 @@ import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
 import { commandMinecraft } from "./Commands/minecraft.js";
+
+import { startMinecraftLogListener } from "./minecraftListener.js";
 
 dotenv.config();
 
@@ -141,8 +132,8 @@ const commands: CommandInterface[] = [
 	},
 ];
 
-const DISCORD_TOKEN: string = process.env.DISCORDJS_TESTBOT_TOKEN;
-const CLIENT_ID: string = process.env.DISCORDJS_TESTBOT_ID;
+const DISCORD_TOKEN: string = process.env.DISCORDJS_BOT_TOKEN;
+const CLIENT_ID: string = process.env.DISCORDJS_BOT_ID;
 const PLAYGROUND_GUILD_ID: string = process.env.GUILD_ID_PLAYGROUND;
 
 const rest: REST = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
@@ -153,9 +144,9 @@ const rest: REST = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 
 		await rest.put(
 			// This is for testing purposes
-			Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
+			// Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
 			// This is for production
-			// Routes.applicationCommands(CLIENT_ID),
+			Routes.applicationCommands(CLIENT_ID),
 			{ body: commands },
 		);
 
@@ -179,6 +170,9 @@ DISCORD_CLIENT.once("ready", () => {
 	});
 
 	console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
+
+	// Start Minecraft listener
+	startMinecraftLogListener(DISCORD_CLIENT);
 });
 
 // Slash (/) commands handling
@@ -255,7 +249,7 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction: Interaction) => {
 		commandPokedex(interaction);
 	}
 
-	// help command
+	// minecraft command
 	else if (commandName === "minecraft") {
 		commandMinecraft(interaction);
 	}
@@ -266,18 +260,16 @@ DISCORD_CLIENT.on("messageCreate", (message: Message) => {
 	// Check if the message is sent in a discord DM
 	if (message.channel.type === ChannelType.DM) {
 		console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
-
-		printAdditionalMessageContent(message);
 	}
 
 	// The message is being sent in a discord server so we can get (channel.name)
 	else {
 		if (message.content !== "") {
 			console.log(
-				`${message.author.tag} in #${message.channel.name} in ${message.guild?.name} : ${message.content}`,
+				`${message.author.tag} in #${handleChannelType(message)} in ${
+					message.guild?.name
+				} : ${message.content}`,
 			);
-
-			printAdditionalMessageContent(message);
 		}
 	}
 
@@ -287,45 +279,15 @@ DISCORD_CLIENT.on("messageCreate", (message: Message) => {
 	}
 });
 
-function printAdditionalMessageContent(message: Message) {
-	// Get the mentions IDs and use them to find out the named of who's being mentioned
-	let text: string = message.content;
-	text = text.replace(/[^0-9\s]/g, "");
-	const arr: string[] = text.split(" ");
-	arr.forEach((id: string) => {
-		if (DISCORD_CLIENT.users.cache.find((user: User) => user.id === id) !== undefined) {
-			console.log(
-				`Tag : ${DISCORD_CLIENT.users.cache.find((user: User) => user.id === id)?.tag}`,
-			);
-		}
-	});
-
-	// Get the emotes IDs and use them to find out the emote URL
-	let emoji: string = message.content;
-	emoji = emoji.replace(/[^0-9\s]/g, "");
-
-	const arr1: string[] = emoji.split(" ");
-
-	arr1.forEach((id: string) => {
-		https.get(`https://cdn.discordapp.com/emojis/${id}.png`, (res) => {
-			const { statusCode } = res;
-			if (statusCode === 200) {
-				// HTTP 200 = OK
-				console.log(`Emote : https://cdn.discordapp.com/emojis/${id}.png`);
-			}
-		});
-	});
-
-	// Get Attachement files if there are any
-	message.attachments.each((attachmentItem: any) =>
-		console.log(`Attached file : ${attachmentItem.attachment}`),
-	);
-
-	// Print embeds if there are any
-	if (message.embeds.length > 0) {
-		message.embeds.forEach((embed: Embed) =>
-			console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`),
-		);
+function handleChannelType(message: Message) {
+	if (message.channel.isTextBased) {
+		return message.channel.isTextBased.name;
+	} else if (message.channel.isThread) {
+		return message.channel.isThread.name;
+	} else if (message.channel.isVoiceBased) {
+		return message.channel.isVoiceBased.name;
+	} else {
+		return "Channel Type Unknown";
 	}
 }
 
