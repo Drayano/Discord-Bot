@@ -1,6 +1,6 @@
 import { Interaction, EmbedBuilder } from "discord.js";
 
-export async function command_code(interaction: Interaction) {
+export async function commandCode(interaction: Interaction) {
 	if (!interaction.isCommand()) {
 		return;
 	}

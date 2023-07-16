@@ -5,7 +5,7 @@ function getRandomInt(max: number): number {
 	return Math.floor(Math.random() * max);
 }
 
-export async function command_xkcd(interaction: Interaction) {
+export async function commandXkcd(interaction: Interaction) {
 	if (!interaction.isCommand()) {
 		return;
 	}
@@ -15,12 +15,12 @@ export async function command_xkcd(interaction: Interaction) {
 		.then((res: Response) => res.json())
 		.then((result: XkcdAPI) => {
 			// Get current latest XKCD Number and use it to generate a random number
-			// 0 < comic_number < latest
+			// 0 < comicNumber < latest
 			const latest: number = result.num;
-			const comic_number: number = getRandomInt(latest) + 1; // Start at 1
+			const comicNumber: number = getRandomInt(latest) + 1; // Start at 1
 
 			// Fetch a random XKCD
-			fetch(`https://xkcd.com/${comic_number}/info.0.json`)
+			fetch(`https://xkcd.com/${comicNumber}/info.0.json`)
 				.then((res: Response) => res.json())
 				.then((result: XkcdAPI) => {
 					// Create an Embed with a Title, the Image and the Alt message as footer
@@ -44,7 +44,7 @@ interface XkcdAPI {
 	month: string;
 	news: string;
 	num: number;
-	safe_title: string;
+	safeTitle: string;
 	title: string;
 	transcript: string;
 	year: string;

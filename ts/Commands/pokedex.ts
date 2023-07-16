@@ -4,15 +4,15 @@ function capitalizeFirstLetter(string: string): string {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export async function command_pokedex(interaction: Interaction): Promise<void> {
+export async function commandPokedex(interaction: Interaction): Promise<void> {
 	if (!interaction.isCommand()) {
 		return;
 	}
 
 	const { options } = interaction;
 
-	let input: string = options.get("input")?.value?.toString()!;
-	let value: string = options.get("value")?.value?.toString()!;
+	const input: string = options.get("input")?.value?.toString() ?? "";
+	const value: string = options.get("value")?.value?.toString() ?? "";
 
 	if (input.toLowerCase() === "pokemon" || input.toLowerCase() === "pokémon") {
 		// Fetch a pokemon
@@ -34,7 +34,7 @@ export async function command_pokedex(interaction: Interaction): Promise<void> {
 					.setTitle(
 						`Pokemon #${result.id} - ${capitalizeFirstLetter(result.name.toString())}`,
 					)
-					.setImage(result.sprites.other["official-artwork"].front_default)
+					.setImage(result.sprites.other.officialArtwork.frontDefault)
 					.setFooter({ text: `${types}` });
 
 				// Reply with the Embed
@@ -50,7 +50,7 @@ interface Ability {
 
 interface AbilityInfo {
 	ability: Ability;
-	is_hidden: boolean;
+	isHidden: boolean;
 	slot: number;
 }
 
@@ -60,7 +60,7 @@ interface Version {
 }
 
 interface GameIndex {
-	game_index: number;
+	gameIndex: number;
 	version: Version;
 }
 
@@ -70,17 +70,17 @@ interface Move {
 }
 
 interface VersionGroupDetail {
-	level_learned_at: number;
-	move_learn_method: {
+	levelLearnedAt: number;
+	moveLearnMethod: {
 		name: string;
 		url: string;
 	};
-	version_group: Version;
+	versionGroup: Version;
 }
 
 interface MoveInfo {
 	move: Move;
-	version_group_details: VersionGroupDetail[];
+	versionGroupDetails: VersionGroupDetail[];
 }
 
 interface Form {
@@ -94,184 +94,184 @@ interface Species {
 }
 
 interface Sprites {
-	back_default: string | null;
-	back_female: string | null;
-	back_shiny: string | null;
-	back_shiny_female: string | null;
-	front_default: string | null;
-	front_female: string | null;
-	front_shiny: string | null;
-	front_shiny_female: string | null;
+	backDefault: string | null;
+	backFemale: string | null;
+	backShiny: string | null;
+	backShinyFemale: string | null;
+	frontDefault: string | null;
+	frontFemale: string | null;
+	frontShiny: string | null;
+	frontShinyFemale: string | null;
 	other: {
-		dream_world: {
-			front_default: string | null;
-			front_female: string | null;
+		dreamWorld: {
+			frontDefault: string | null;
+			frontFemale: string | null;
 		};
 		home: {
-			front_default: string | null;
-			front_female: string | null;
-			front_shiny: string | null;
-			front_shiny_female: string | null;
+			frontDefault: string | null;
+			frontFemale: string | null;
+			frontShiny: string | null;
+			frontShinyFemale: string | null;
 		};
-		"official-artwork": {
-			front_default: string | null;
-			front_shiny: string | null;
+		officialArtwork: {
+			frontDefault: string | null;
+			frontShiny: string | null;
 		};
 	};
 	versions: {
-		"generation-i": {
-			"red-blue": {
-				back_default: string | null;
-				back_gray: string | null;
-				back_transparent: string | null;
-				front_default: string | null;
-				front_gray: string | null;
-				front_transparent: string | null;
+		generationI: {
+			redBlue: {
+				backDefault: string | null;
+				backGray: string | null;
+				backTransparent: string | null;
+				frontDefault: string | null;
+				frontGray: string | null;
+				frontTransparent: string | null;
 			};
 			yellow: {
-				back_default: string | null;
-				back_gray: string | null;
-				back_transparent: string | null;
-				front_default: string | null;
-				front_gray: string | null;
-				front_transparent: string | null;
+				backDefault: string | null;
+				backGray: string | null;
+				backTransparent: string | null;
+				frontDefault: string | null;
+				frontGray: string | null;
+				frontTransparent: string | null;
 			};
 		};
-		"generation-ii": {
+		generationII: {
 			crystal: {
-				back_default: string | null;
-				back_shiny: string | null;
-				back_shiny_transparent: string | null;
-				back_transparent: string | null;
-				front_default: string | null;
-				front_shiny: string | null;
-				front_shiny_transparent: string | null;
-				front_transparent: string | null;
+				backDefault: string | null;
+				backShiny: string | null;
+				backShinyTransparent: string | null;
+				backTransparent: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
+				frontShinyTransparent: string | null;
+				frontTransparent: string | null;
 			};
 			gold: {
-				back_default: string | null;
-				back_shiny: string | null;
-				front_default: string | null;
-				front_shiny: string | null;
-				front_transparent: string | null;
+				backDefault: string | null;
+				backShiny: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
+				frontTransparent: string | null;
 			};
 			silver: {
-				back_default: string | null;
-				back_shiny: string | null;
-				front_default: string | null;
-				front_shiny: string | null;
-				front_transparent: string | null;
+				backDefault: string | null;
+				backShiny: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
+				frontTransparent: string | null;
 			};
 		};
-		"generation-iii": {
+		generationIII: {
 			emerald: {
-				front_default: string | null;
-				front_shiny: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
 			};
-			"firered-leafgreen": {
-				back_default: string | null;
-				back_shiny: string | null;
-				front_default: string | null;
-				front_shiny: string | null;
+			fireredLeafgreen: {
+				backDefault: string | null;
+				backShiny: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
 			};
-			"ruby-sapphire": {
-				back_default: string | null;
-				back_shiny: string | null;
-				front_default: string | null;
-				front_shiny: string | null;
+			rubySapphire: {
+				backDefault: string | null;
+				backShiny: string | null;
+				frontDefault: string | null;
+				frontShiny: string | null;
 			};
 		};
-		"generation-iv": {
-			"diamond-pearl": {
-				back_default: string | null;
-				back_female: string | null;
-				back_shiny: string | null;
-				back_shiny_female: string | null;
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+		generationIV: {
+			diamondPearl: {
+				backDefault: string | null;
+				backFemale: string | null;
+				backShiny: string | null;
+				backShinyFemale: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
-			"heartgold-soulsilver": {
-				back_default: string | null;
-				back_female: string | null;
-				back_shiny: string | null;
-				back_shiny_female: string | null;
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+			heartgoldSoulsilver: {
+				backDefault: string | null;
+				backFemale: string | null;
+				backShiny: string | null;
+				backShinyFemale: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
 			platinum: {
-				back_default: string | null;
-				back_female: string | null;
-				back_shiny: string | null;
-				back_shiny_female: string | null;
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+				backDefault: string | null;
+				backFemale: string | null;
+				backShiny: string | null;
+				backShinyFemale: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
 		};
-		"generation-v": {
-			"black-white": {
+		generationV: {
+			blackWhite: {
 				animated: {
-					back_default: string | null;
-					back_female: string | null;
-					back_shiny: string | null;
-					back_shiny_female: string | null;
-					front_default: string | null;
-					front_female: string | null;
-					front_shiny: string | null;
-					front_shiny_female: string | null;
+					backDefault: string | null;
+					backFemale: string | null;
+					backShiny: string | null;
+					backShinyFemale: string | null;
+					frontDefault: string | null;
+					frontFemale: string | null;
+					frontShiny: string | null;
+					frontShinyFemale: string | null;
 				};
-				back_default: string | null;
-				back_female: string | null;
-				back_shiny: string | null;
-				back_shiny_female: string | null;
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+				backDefault: string | null;
+				backFemale: string | null;
+				backShiny: string | null;
+				backShinyFemale: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
 		};
-		"generation-vi": {
-			"omegaruby-alphasapphire": {
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+		generationVI: {
+			omegarubyAlphasapphire: {
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
-			"x-y": {
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+			xy: {
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
 		};
-		"generation-vii": {
+		generationVII: {
 			icons: {
-				front_default: string | null;
-				front_female: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
 			};
-			"ultra-sun-ultra-moon": {
-				front_default: string | null;
-				front_female: string | null;
-				front_shiny: string | null;
-				front_shiny_female: string | null;
+			ultraSunUltraMoon: {
+				frontDefault: string | null;
+				frontFemale: string | null;
+				frontShiny: string | null;
+				frontShinyFemale: string | null;
 			};
 		};
-		"generation-viii": {
+		generationVIII: {
 			icons: {
-				front_default: string | null;
-				front_female: string | null;
+				frontDefault: string | null;
+				frontFemale: string | null;
 			};
 		};
 	};
 }
 
 interface Stat {
-	base_stat: number;
+	baseStat: number;
 	effort: number;
 	stat: {
 		name: string;
@@ -289,18 +289,18 @@ interface Type {
 
 interface Pokemon {
 	abilities: AbilityInfo[];
-	base_experience: number;
+	baseExperience: number;
 	forms: Form[];
-	game_indices: GameIndex[];
+	gameIndices: GameIndex[];
 	height: number;
-	held_items: any[];
+	heldItems: any[];
 	id: number;
-	is_default: boolean;
-	location_area_encounters: string;
+	isDefault: boolean;
+	locationAreaEncounters: string;
 	moves: MoveInfo[];
 	name: string;
 	order: number;
-	past_types: any[];
+	pastTypes: any[];
 	species: Species;
 	sprites: Sprites;
 	stats: Stat[];

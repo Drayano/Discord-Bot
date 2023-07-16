@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-export async function commandHelp(discordClient, interaction) {
+export async function commandMinecraft(discordClient, interaction) {
     if (!interaction.isCommand()) {
         return;
     }

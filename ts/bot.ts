@@ -15,17 +15,18 @@ import dotenv from "dotenv";
 
 import * as https from "https";
 
-import { command_help } from "./Commands/help.js";
-import { command_code } from "./Commands/code.js";
-import { command_spongebob } from "./Commands/spongebob.js";
-import { command_memes } from "./Commands/memes.js";
-import { command_xkcd } from "./Commands/xkcd.js";
-import { command_translate } from "./Commands/translate.js";
-import { command_pokedex } from "./Commands/pokedex.js";
+import { commandHelp } from "./Commands/help.js";
+import { commandCode } from "./Commands/code.js";
+import { commandSpongebob } from "./Commands/spongebob.js";
+import { commandMemes } from "./Commands/memes.js";
+import { commandXkcd } from "./Commands/xkcd.js";
+import { commandTranslate } from "./Commands/translate.js";
+import { commandPokedex } from "./Commands/pokedex.js";
+import { commandMinecraft } from "./Commands/minecraft.js";
 
 dotenv.config();
 
-const discord_client: Client = new Client({
+const DISCORD_CLIENT: Client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
@@ -134,13 +135,17 @@ const commands: CommandInterface[] = [
 			},
 		],
 	},
+	{
+		name: "minecraft",
+		description: "Check the status of the Minecraft Server",
+	},
 ];
 
-const discord_token: string = process.env.DISCORDJS_BOT_TOKEN;
-const client_id: string = process.env.DISCORDJS_BOT_ID;
-const playground_guild_id: string = process.env.GUILD_ID_PLAYGROUND;
+const DISCORD_TOKEN: string = process.env.DISCORDJS_TESTBOT_TOKEN;
+const CLIENT_ID: string = process.env.DISCORDJS_TESTBOT_ID;
+const PLAYGROUND_GUILD_ID: string = process.env.GUILD_ID_PLAYGROUND;
 
-const rest: REST = new REST({ version: "10" }).setToken(discord_token);
+const rest: REST = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 
 (async () => {
 	try {
@@ -148,9 +153,9 @@ const rest: REST = new REST({ version: "10" }).setToken(discord_token);
 
 		await rest.put(
 			// This is for testing purposes
-			// Routes.applicationGuildCommands(client_id, playground_guild_id),
+			Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
 			// This is for production
-			Routes.applicationCommands(client_id),
+			// Routes.applicationCommands(CLIENT_ID),
 			{ body: commands },
 		);
 
@@ -161,10 +166,10 @@ const rest: REST = new REST({ version: "10" }).setToken(discord_token);
 })();
 
 // When the client is ready, run this code (only once)
-discord_client.once("ready", () => {
-	console.log(`${discord_client.user?.tag} has logged in`);
+DISCORD_CLIENT.once("ready", () => {
+	console.log(`${DISCORD_CLIENT.user?.tag} has logged in`);
 
-	discord_client.user?.setPresence({
+	DISCORD_CLIENT.user?.setPresence({
 		status: "online", // You can show online, idle....
 		activities: [
 			{
@@ -173,11 +178,11 @@ discord_client.once("ready", () => {
 		],
 	});
 
-	console.log(`${discord_client.user?.tag} status set to "DrayaBOT"`);
+	console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
 });
 
 // Slash (/) commands handling
-discord_client.on("interactionCreate", async (interaction: Interaction) => {
+DISCORD_CLIENT.on("interactionCreate", async (interaction: Interaction) => {
 	if (!interaction.isCommand()) {
 		return;
 	}
@@ -201,18 +206,18 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 
 	// help command
 	if (commandName === "help") {
-		command_help(discord_client, interaction);
+		commandHelp(DISCORD_CLIENT, interaction);
 	}
 
 	// code command
 	else if (commandName === "code") {
-		command_code(interaction);
+		commandCode(interaction);
 	}
 
 	// spongebob command
 	else if (commandName === "spongebob") {
 		console.log(`with '${options.get("input")?.value?.toString()}'`);
-		command_spongebob(interaction);
+		commandSpongebob(interaction);
 	}
 
 	// memes command
@@ -222,12 +227,12 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 				.get("first_line")
 				?.value?.toString()}' '${options.get("second_line")?.value?.toString()}'`,
 		);
-		command_memes(interaction);
+		commandMemes(interaction);
 	}
 
 	// xkcd command
 	else if (commandName === "xkcd") {
-		command_xkcd(interaction);
+		commandXkcd(interaction);
 	}
 
 	// translate command
@@ -237,7 +242,7 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 				.get("input")
 				?.value?.toString()}'`,
 		);
-		command_translate(interaction);
+		commandTranslate(interaction);
 	}
 
 	// translate command
@@ -247,12 +252,17 @@ discord_client.on("interactionCreate", async (interaction: Interaction) => {
 				.get("value")
 				?.value?.toString()}'`,
 		);
-		command_pokedex(interaction);
+		commandPokedex(interaction);
+	}
+
+	// help command
+	else if (commandName === "minecraft") {
+		commandMinecraft(DISCORD_CLIENT, interaction);
 	}
 });
 
 // Messages handling
-discord_client.on("messageCreate", (message: Message) => {
+DISCORD_CLIENT.on("messageCreate", (message: Message) => {
 	// Check if the message is sent in a discord DM
 	if (message.channel.type === ChannelType.DM) {
 		console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
@@ -283,9 +293,9 @@ function printAdditionalMessageContent(message: Message) {
 	text = text.replace(/[^0-9\s]/g, "");
 	const arr: string[] = text.split(" ");
 	arr.forEach((id: string) => {
-		if (discord_client.users.cache.find((user: User) => user.id === id) !== undefined) {
+		if (DISCORD_CLIENT.users.cache.find((user: User) => user.id === id) !== undefined) {
 			console.log(
-				`Tag : ${discord_client.users.cache.find((user: User) => user.id === id)?.tag}`,
+				`Tag : ${DISCORD_CLIENT.users.cache.find((user: User) => user.id === id)?.tag}`,
 			);
 		}
 	});
@@ -307,8 +317,8 @@ function printAdditionalMessageContent(message: Message) {
 	});
 
 	// Get Attachement files if there are any
-	message.attachments.each((attachment_item: any) =>
-		console.log(`Attached file : ${attachment_item.attachment}`),
+	message.attachments.each((attachmentItem: any) =>
+		console.log(`Attached file : ${attachmentItem.attachment}`),
 	);
 
 	// Print embeds if there are any
@@ -320,6 +330,6 @@ function printAdditionalMessageContent(message: Message) {
 }
 
 // Login to Discord with the token
-discord_client.login(discord_token);
+DISCORD_CLIENT.login(DISCORD_TOKEN);
 
 // TODO : Add catch around promises

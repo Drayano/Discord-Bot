@@ -3,15 +3,16 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
 import dotenv from "dotenv";
 import * as https from "https";
-import { command_help } from "./Commands/help.js";
+import { commandHelp } from "./Commands/help.js";
 import { command_code } from "./Commands/code.js";
 import { command_spongebob } from "./Commands/spongebob.js";
 import { command_memes } from "./Commands/memes.js";
 import { command_xkcd } from "./Commands/xkcd.js";
 import { command_translate } from "./Commands/translate.js";
 import { command_pokedex } from "./Commands/pokedex.js";
+import { commandMinecraft } from "./Commands/minecraft.js";
 dotenv.config();
-const discord_client = new Client({
+const DISCORD_CLIENT = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -106,24 +107,28 @@ const commands = [
             },
         ],
     },
+    {
+        name: "minecraft",
+        description: "Check the status of the Minecraft Server",
+    },
 ];
-const discord_token = process.env.DISCORDJS_BOT_TOKEN;
-const client_id = process.env.DISCORDJS_BOT_ID;
-const playground_guild_id = process.env.GUILD_ID_PLAYGROUND;
-const rest = new REST({ version: "10" }).setToken(discord_token);
+const DISCORD_TOKEN = process.env.DISCORDJS_TESTBOT_TOKEN;
+const CLIENT_ID = process.env.DISCORDJS_TESTBOT_ID;
+const PLAYGROUND_GUILD_ID = process.env.GUILD_ID_PLAYGROUND;
+const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 (async () => {
     try {
         console.log("Started refreshing application (/) commands.");
-        await rest.put(Routes.applicationCommands(client_id), { body: commands });
+        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID), { body: commands });
         console.log("Successfully reloaded application (/) commands.");
     }
     catch (error) {
         console.error(error);
     }
 })();
-discord_client.once("ready", () => {
-    console.log(`${discord_client.user?.tag} has logged in`);
-    discord_client.user?.setPresence({
+DISCORD_CLIENT.once("ready", () => {
+    console.log(`${DISCORD_CLIENT.user?.tag} has logged in`);
+    DISCORD_CLIENT.user?.setPresence({
         status: "online",
         activities: [
             {
@@ -131,9 +136,9 @@ discord_client.once("ready", () => {
             },
         ],
     });
-    console.log(`${discord_client.user?.tag} status set to "DrayaBOT"`);
+    console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
 });
-discord_client.on("interactionCreate", async (interaction) => {
+DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
         return;
     }
@@ -145,7 +150,7 @@ discord_client.on("interactionCreate", async (interaction) => {
         console.log(`${interaction.user.tag} in a Direct Message : used the ${commandName} command`);
     }
     if (commandName === "help") {
-        command_help(discord_client, interaction);
+        commandHelp(DISCORD_CLIENT, interaction);
     }
     else if (commandName === "code") {
         command_code(interaction);
@@ -175,8 +180,11 @@ discord_client.on("interactionCreate", async (interaction) => {
             ?.value?.toString()}'`);
         command_pokedex(interaction);
     }
+    else if (commandName === "minecraft") {
+        commandMinecraft(DISCORD_CLIENT, interaction);
+    }
 });
-discord_client.on("messageCreate", (message) => {
+DISCORD_CLIENT.on("messageCreate", (message) => {
     if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
         printAdditionalMessageContent(message);
@@ -196,8 +204,8 @@ function printAdditionalMessageContent(message) {
     text = text.replace(/[^0-9\s]/g, "");
     const arr = text.split(" ");
     arr.forEach((id) => {
-        if (discord_client.users.cache.find((user) => user.id === id) !== undefined) {
-            console.log(`Tag : ${discord_client.users.cache.find((user) => user.id === id)?.tag}`);
+        if (DISCORD_CLIENT.users.cache.find((user) => user.id === id) !== undefined) {
+            console.log(`Tag : ${DISCORD_CLIENT.users.cache.find((user) => user.id === id)?.tag}`);
         }
     });
     let emoji = message.content;
@@ -211,9 +219,9 @@ function printAdditionalMessageContent(message) {
             }
         });
     });
-    message.attachments.each((attachment_item) => console.log(`Attached file : ${attachment_item.attachment}`));
+    message.attachments.each((attachmentItem) => console.log(`Attached file : ${attachmentItem.attachment}`));
     if (message.embeds.length > 0) {
         message.embeds.forEach((embed) => console.log(`\nEmbed : ${JSON.stringify(embed.toJSON())}\n`));
     }
 }
-discord_client.login(discord_token);
+DISCORD_CLIENT.login(DISCORD_TOKEN);

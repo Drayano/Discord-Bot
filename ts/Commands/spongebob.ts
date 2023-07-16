@@ -1,6 +1,6 @@
 import { Interaction } from "discord.js";
 
-export async function command_spongebob(interaction: Interaction) {
+export async function commandSpongebob(interaction: Interaction) {
 	if (!interaction.isCommand()) {
 		return;
 	}
@@ -9,11 +9,12 @@ export async function command_spongebob(interaction: Interaction) {
 
 	let text: string = "";
 	let spongebob: string = "";
+	const argumentLength = options.get("input")?.value?.toString().length;
 
 	// Check if the input text isn't an empty string
-	if (options.get("input")?.value?.toString().length !== undefined) {
-		for (let i = 0; i < options.get("input")?.value?.toString().length!; i++) {
-			text = options.get("input")?.value?.toString()!;
+	if (argumentLength !== undefined) {
+		for (let i = 0; i < argumentLength; i++) {
+			text = options.get("input")?.value?.toString() ?? "";
 
 			if (i % 2 === 0) {
 				spongebob += text.charAt(i).toLowerCase();
