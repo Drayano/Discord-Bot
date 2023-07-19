@@ -13,6 +13,7 @@ declare global {
 			MINECRAFT_SERVER_PORT: number;
 			MINECRAFT_SERVER_LOGS_PATH: string;
 			MINECRAFT_CHANNEL_PLAYGROUND: string;
+			MINECRAFT_ROLE_ID: string;
 		}
 	}
 }
