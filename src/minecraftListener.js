@@ -1,4 +1,6 @@
 import { Tail } from "tail";
+import dotenv from "dotenv";
+dotenv.config();
 const serverLogFile = process.env.MINECRAFT_SERVER_LOGS_PATH;
 const discordChannelId = process.env.MINECRAFT_CHANNEL_PLAYGROUND;
 export function startMinecraftLogListener(discordClient) {
@@ -6,7 +8,7 @@ export function startMinecraftLogListener(discordClient) {
     tail.on("line", (line) => {
         const parsedLine = parseLogLine(line);
         if (parsedLine) {
-            const content = `<${parsedLine.position}> ${parsedLine.username}: ${parsedLine.message}`;
+            const content = `<${parsedLine.username}> : ${parsedLine.message}`;
             sendToDiscord(content, discordClient);
         }
     });
@@ -14,13 +16,12 @@ export function startMinecraftLogListener(discordClient) {
         console.error("Error occurred while tailing Minecraft server log file:", error);
     });
     function parseLogLine(line) {
-        const chatRegex = /<(\w+)> (\w+): (.+)/;
+        const chatRegex = /<(\w+)> (.+)/;
         const match = line.match(chatRegex);
         if (match) {
-            const position = match[1];
-            const username = match[2];
-            const message = match[3];
-            return { position, username, message };
+            const username = match[1];
+            const message = match[2];
+            return { username, message };
         }
         return null;
     }
