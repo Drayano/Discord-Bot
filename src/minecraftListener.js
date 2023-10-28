@@ -16,31 +16,7 @@ export function startMinecraftLogListener(discordClient) {
         console.error("Error occurred while tailing Minecraft server log file : ", error);
     });
     function parseLogLine(line) {
-        const chatRegex = /\[(\d+:\d+:\d+)\] .+ <(\w+)> (.+)/;
-        const match = line.match(chatRegex);
-        if (match) {
-            const timestamp = match[1];
-            const username = match[2];
-            const message = match[3];
-            return `[${timestamp}] <${username}> : ${message}`;
-        }
-        const eventRegex = /\[(\d+:\d+:\d+)\] .+ (\w+)\s+(joined the game|left the game|has made the advancement.+|issued server command.+)/;
-        const matchEvent = line.match(eventRegex);
-        if (matchEvent) {
-            const timestamp = matchEvent[1];
-            const username = matchEvent[2];
-            const message = matchEvent[3];
-            return `[${timestamp}] ${username} ${message}`;
-        }
-        const deathRegex = /\[(\d+:\d+:\d+)\] .+ (\w+)\s+(blew.+|burned.+|discovered.+|didn't want to live in the same world.+|died.+|drown.+|experienced kinetic.+|fell.+|froze.+|hit the ground too.+|left the confines.+|starved.+|suffocated.+|tried.+|walked.+|was.+|went.+|withered.+)/;
-        const matchDeath = line.match(deathRegex);
-        if (matchDeath) {
-            const timestamp = matchDeath[1];
-            const username = matchDeath[2];
-            const message = matchDeath[3];
-            return `[${timestamp}] ${username} ${message}`;
-        }
-        const serverRegex = /\[(\d+:\d+:\d+)\] .+ (Stopping server|Starting minecraft server)/;
+        const serverRegex = /\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (Stopping server|Starting minecraft server)/;
         const matchServer = line.match(serverRegex);
         if (matchServer) {
             const timestamp = matchServer[1];
@@ -55,7 +31,54 @@ export function startMinecraftLogListener(discordClient) {
                 return `[${timestamp}] ${message}`;
             }
         }
+        const chatRegex = /\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ <(\w+)> (.+)/;
+        const match = line.match(chatRegex);
+        if (match) {
+            const timestamp = match[1];
+            const username = match[2];
+            const message = match[3];
+            if (checkUsername(username)) {
+                return `[${timestamp}] <${username}> : ${message}`;
+            }
+            return null;
+        }
+        const eventRegex = /\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (\w+)\s+(joined the game|left the game|has made the advancement.+|has completed the challenge.+|issued server command.+)/;
+        const matchEvent = line.match(eventRegex);
+        if (matchEvent) {
+            const timestamp = matchEvent[1];
+            const username = matchEvent[2];
+            const message = matchEvent[3];
+            if (checkUsername(username)) {
+                return `[${timestamp}] ${username} ${message}`;
+            }
+            return null;
+        }
+        const deathRegex = /\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (\w+)\s+(blew.+|burned.+|discovered.+|didn't want to live in the same world.+|died.+|drown.+|experienced kinetic.+|fell.+|froze.+|hit the ground too.+|left the confines.+|starved.+|suffocated.+|tried.+|walked.+|was.+|went.+|withered.+)/;
+        const matchDeath = line.match(deathRegex);
+        if (matchDeath) {
+            const timestamp = matchDeath[1];
+            const username = matchDeath[2];
+            const message = matchDeath[3];
+            if (checkUsername(username)) {
+                return `[${timestamp}] ${username} ${message}`;
+            }
+            return null;
+        }
         return null;
+    }
+    function checkUsername(username) {
+        if (username === "AbadAl" ||
+            username === "Abed_Dz" ||
+            username === "aymen2" ||
+            username === "DrayanoX" ||
+            username === "gweinblade" ||
+            username === "Nebel11" ||
+            username === "nebel117" ||
+            username === "Raijhin" ||
+            username === "Tahtouha") {
+            return true;
+        }
+        return false;
     }
     function sendToDiscord(content, discordClient) {
         const channel = discordClient.channels.cache.get(discordChannelId);

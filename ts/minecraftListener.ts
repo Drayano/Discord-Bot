@@ -29,47 +29,9 @@ export function startMinecraftLogListener(discordClient: Client): void {
 		// Return an object containing position, username, and message if the line is a valid chat message, otherwise return null
 		// Example parsing logic: extract position, username, and message using regular expressions or string manipulation
 
-		// Parsing messages
-		const chatRegex = /\[(\d+:\d+:\d+)\] .+ <(\w+)> (.+)/;
-		const match = line.match(chatRegex);
-
-		if (match) {
-			const timestamp = match[1];
-			const username = match[2];
-			const message = match[3];
-
-			return `[${timestamp}] <${username}> : ${message}`;
-		}
-
-		// Parsing non-chat messages
-		const eventRegex =
-			/\[(\d+:\d+:\d+)\] .+ (\w+)\s+(joined the game|left the game|has made the advancement.+|issued server command.+)/;
-		const matchEvent = line.match(eventRegex);
-
-		if (matchEvent) {
-			const timestamp = matchEvent[1];
-			const username = matchEvent[2];
-			const message = matchEvent[3];
-
-			return `[${timestamp}] ${username} ${message}`;
-		}
-
-		// Parsing death messages
-		const deathRegex =
-			/\[(\d+:\d+:\d+)\] .+ (\w+)\s+(blew.+|burned.+|discovered.+|didn't want to live in the same world.+|died.+|drown.+|experienced kinetic.+|fell.+|froze.+|hit the ground too.+|left the confines.+|starved.+|suffocated.+|tried.+|walked.+|was.+|went.+|withered.+)/;
-
-		const matchDeath = line.match(deathRegex);
-
-		if (matchDeath) {
-			const timestamp = matchDeath[1];
-			const username = matchDeath[2];
-			const message = matchDeath[3];
-
-			return `[${timestamp}] ${username} ${message}`;
-		}
-
 		// Parsing Online / Offline server
-		const serverRegex = /\[(\d+:\d+:\d+)\] .+ (Stopping server|Starting minecraft server)/;
+		const serverRegex =
+			/\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (Stopping server|Starting minecraft server)/;
 
 		const matchServer = line.match(serverRegex);
 
@@ -86,7 +48,76 @@ export function startMinecraftLogListener(discordClient: Client): void {
 			}
 		}
 
+		// Parsing messages
+		const chatRegex = /\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ <(\w+)> (.+)/;
+		const match = line.match(chatRegex);
+
+		if (match) {
+			const timestamp = match[1];
+			const username = match[2];
+			const message = match[3];
+
+			if (checkUsername(username)) {
+				return `[${timestamp}] <${username}> : ${message}`;
+			}
+
+			return null;
+		}
+
+		// Parsing non-chat messages
+		const eventRegex =
+			/\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (\w+)\s+(joined the game|left the game|has made the advancement.+|has completed the challenge.+|issued server command.+)/;
+		const matchEvent = line.match(eventRegex);
+
+		if (matchEvent) {
+			const timestamp = matchEvent[1];
+			const username = matchEvent[2];
+			const message = matchEvent[3];
+
+			if (checkUsername(username)) {
+				return `[${timestamp}] ${username} ${message}`;
+			}
+
+			return null;
+		}
+
+		// Parsing death messages
+		const deathRegex =
+			/\[\d+\w+\d+ (\d+:\d+:\d+)\.\d+\] .+ (\w+)\s+(blew.+|burned.+|discovered.+|didn't want to live in the same world.+|died.+|drown.+|experienced kinetic.+|fell.+|froze.+|hit the ground too.+|left the confines.+|starved.+|suffocated.+|tried.+|walked.+|was.+|went.+|withered.+)/;
+
+		const matchDeath = line.match(deathRegex);
+
+		if (matchDeath) {
+			const timestamp = matchDeath[1];
+			const username = matchDeath[2];
+			const message = matchDeath[3];
+
+			if (checkUsername(username)) {
+				return `[${timestamp}] ${username} ${message}`;
+			}
+
+			return null;
+		}
+
 		return null;
+	}
+
+	function checkUsername(username: string): boolean {
+		if (
+			username === "AbadAl" ||
+			username === "Abed_Dz" ||
+			username === "aymen2" ||
+			username === "DrayanoX" ||
+			username === "gweinblade" ||
+			username === "Nebel11" ||
+			username === "nebel117" ||
+			username === "Raijhin" ||
+			username === "Tahtouha"
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 	function sendToDiscord(content: string, discordClient: Client): void {
