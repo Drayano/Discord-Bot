@@ -48,12 +48,14 @@ export async function commandMemes(interaction: Interaction): Promise<void> {
 
 				// Send an HTTP POST request with the necessary informations to make the meme
 				fetch(
-					`https://api.imgflip.com/caption_image?templateId=${params.templateId}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`,
+					`https://api.imgflip.com/caption_image?template_id=${params.templateId}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`,
 				)
 					.then((res: Response) => res.json())
 					.then((result: ImgflipResult) => {
 						// Reply with the captioned meme
-						interaction.reply(result.data.url);
+						if (result.success) {
+							interaction.reply(result.data.url);
+						}
 					});
 			}
 		});
@@ -86,10 +88,10 @@ interface ImgflipResult {
 
 interface CallParams {
 	templateId: string;
-	text0?: string | undefined;
-	text1?: string | undefined;
-	text2?: string | undefined;
-	text3?: string | undefined;
+	text0?: string;
+	text1?: string;
+	text2?: string;
+	text3?: string;
 	username: string;
 	password: string;
 }

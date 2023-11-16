@@ -25,10 +25,12 @@ export async function commandMemes(interaction) {
                 username: username,
                 password: password,
             };
-            fetch(`https://api.imgflip.com/caption_image?templateId=${params.templateId}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`)
+            fetch(`https://api.imgflip.com/caption_image?template_id=${params.templateId}&username=${params.username}&password=${params.password}&text0=${params.text0}&text1=${params.text1}`)
                 .then((res) => res.json())
                 .then((result) => {
-                interaction.reply(result.data.url);
+                if (result.success) {
+                    interaction.reply(result.data.url);
+                }
             });
         }
     });

@@ -9,7 +9,7 @@ export async function commandHelp(discordClient, interaction) {
         /spongebob [input] : Transforms the input text into sPoNgE bOb cAsE \n
         /xkcd : Post a random XKCD Comic.\n
         /pokedex [input] [value] : Search for a Pokemon, Move or Item to print (Only Pokemons are supported for now)
-        Eg : /pokedex pokemon dragonite : Print the Dragonite pokemon
+        Eg : /pokedex pokemon dragonite : Print the Dragonite pokemon \n
         /memes [input] [first_line] [second_line] : Create a meme from the input using the lines as captions
         Eg : /memes input:drake first_line:nice second_line:meme
         To create a Drake no/yes meme with the captions "nice" and "meme" \n
