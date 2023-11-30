@@ -20,6 +20,7 @@ declare global {
 			NOMEDIA_TRIGGERS: string;
 			NOMEDIA_FUNNY_CAT: string;
 			NOMEDIA_HOMER_GIF: string;
+			NOMEDIA_RISITAS_GIF: string;
 		}
 	}
 }

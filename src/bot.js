@@ -204,6 +204,9 @@ async function checkMessageContent(message) {
                 case 1:
                     message.reply(process.env.NOMEDIA_HOMER_GIF);
                     break;
+                case 2:
+                    message.reply(process.env.NOMEDIA_RISITAS_GIF);
+                    break;
                 default:
                     break;
             }
