@@ -1,8 +1,10 @@
+import dotenv from "dotenv";
+import * as fs from "fs";
+import * as readline from "readline";
+
 import { Client, Interaction, Message, Partials } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { ChannelType, GatewayIntentBits, Routes } from "discord-api-types/v10";
-
-import dotenv from "dotenv";
 
 import { commandHelp } from "./Commands/help.js";
 import { commandCode } from "./Commands/code.js";
@@ -11,11 +13,6 @@ import { commandMemes } from "./Commands/memes.js";
 import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
-
-import { startMinecraftLogListener } from "./minecraftListener.js";
-
-import * as fs from "fs";
-import * as readline from "readline";
 
 dotenv.config();
 
@@ -143,9 +140,9 @@ const rest: REST = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 
 		await rest.put(
 			// This is for testing purposes
-			Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
+			// Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
 			// This is for production
-			// Routes.applicationCommands(CLIENT_ID),
+			Routes.applicationCommands(CLIENT_ID),
 			{ body: commands },
 		);
 
@@ -169,9 +166,6 @@ DISCORD_CLIENT.once("ready", () => {
 	});
 
 	console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
-
-	// Start Minecraft listener
-	startMinecraftLogListener(DISCORD_CLIENT);
 });
 
 // Slash (/) commands handling
@@ -256,17 +250,6 @@ DISCORD_CLIENT.on("messageCreate", (message: Message) => {
 		console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
 	}
 
-	// The message is being sent in a discord server so we can get (channel.name)
-	else {
-		if (message.content !== "") {
-			console.log(
-				`${message.author.tag} in #${handleChannelType(message)} in ${
-					message.guild?.name
-				} : ${message.content}`,
-			);
-		}
-	}
-
 	// Don't reply to ourselves or other bots
 	if (message.author.bot) {
 		return;
@@ -283,9 +266,6 @@ async function checkMessageContent(message: Message) {
 		const matchingIndex = lines.findIndex((line) => line === message.content);
 
 		if (matchingIndex !== -1) {
-			// Match found, perform action based on the matching line number
-			console.log(`Match found at line ${matchingIndex + 1}.`);
-
 			// 0 : first trigger line / 1 : second trigger line etc...
 			switch (matchingIndex) {
 				case 0:
@@ -325,18 +305,6 @@ function readAndStoreLines(filePath: string): Promise<string[]> {
 			reject(err);
 		});
 	});
-}
-
-function handleChannelType(message: Message) {
-	if (message.channel.isTextBased) {
-		return message.channel.isTextBased.name;
-	} else if (message.channel.isThread) {
-		return message.channel.isThread.name;
-	} else if (message.channel.isVoiceBased) {
-		return message.channel.isVoiceBased.name;
-	} else {
-		return "Channel Type Unknown";
-	}
 }
 
 // Login to Discord with the token

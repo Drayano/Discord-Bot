@@ -1,19 +1,21 @@
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
+			// Bots Info
 			DISCORDJS_BOT_TOKEN: string;
 			DISCORDJS_TESTBOT_TOKEN: string;
 			DISCORDJS_BOT_ID: string;
 			DISCORDJS_TESTBOT_ID: string;
+
+			// Guild IDs
 			GUILD_ID_PLAYGROUND: string;
 			GUILD_ID_YUGEN: string;
+
+			// Imgflip logins
 			IMGFLIP_USERNAME: string;
 			IMGFLIP_PASSWORD: string;
-			MINECRAFT_SERVER_IP: string;
-			MINECRAFT_SERVER_PORT: number;
-			MINECRAFT_SERVER_LOGS_PATH: string;
-			MINECRAFT_CHANNEL_PLAYGROUND: string;
-			MINECRAFT_ROLE_ID: string;
+
+			// NOMEDIA
 			GUILD_ID_NOMEDIA: string;
 			NOMEDIA_TRIGGERS: string;
 			NOMEDIA_FUNNY_CAT: string;

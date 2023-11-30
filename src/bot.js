@@ -1,7 +1,9 @@
+import dotenv from "dotenv";
+import * as fs from "fs";
+import * as readline from "readline";
 import { Client, Partials } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { ChannelType, GatewayIntentBits, Routes } from "discord-api-types/v10";
-import dotenv from "dotenv";
 import { commandHelp } from "./Commands/help.js";
 import { commandCode } from "./Commands/code.js";
 import { commandSpongebob } from "./Commands/spongebob.js";
@@ -9,9 +11,6 @@ import { commandMemes } from "./Commands/memes.js";
 import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
-import { startMinecraftLogListener } from "./minecraftListener.js";
-import * as fs from "fs";
-import * as readline from "readline";
 dotenv.config();
 const DISCORD_CLIENT = new Client({
     intents: [
@@ -117,7 +116,7 @@ const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 (async () => {
     try {
         console.log("Started refreshing application (/) commands.");
-        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID), { body: commands });
+        await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
         console.log("Successfully reloaded application (/) commands.");
     }
     catch (error) {
@@ -135,7 +134,6 @@ DISCORD_CLIENT.once("ready", () => {
         ],
     });
     console.log(`${DISCORD_CLIENT.user?.tag} status set to "DrayaBOT"`);
-    startMinecraftLogListener(DISCORD_CLIENT);
 });
 DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
@@ -184,11 +182,6 @@ DISCORD_CLIENT.on("messageCreate", (message) => {
     if (message.channel.type === ChannelType.DM) {
         console.log(`${message.author.tag} in a Direct Message : ${message.content}`);
     }
-    else {
-        if (message.content !== "") {
-            console.log(`${message.author.tag} in #${handleChannelType(message)} in ${message.guild?.name} : ${message.content}`);
-        }
-    }
     if (message.author.bot) {
         return;
     }
@@ -202,7 +195,6 @@ async function checkMessageContent(message) {
         const lines = await readAndStoreLines(filePath);
         const matchingIndex = lines.findIndex((line) => line === message.content);
         if (matchingIndex !== -1) {
-            console.log(`Match found at line ${matchingIndex + 1}.`);
             switch (matchingIndex) {
                 case 0:
                     message.reply({
@@ -236,19 +228,5 @@ function readAndStoreLines(filePath) {
             reject(err);
         });
     });
-}
-function handleChannelType(message) {
-    if (message.channel.isTextBased) {
-        return message.channel.isTextBased.name;
-    }
-    else if (message.channel.isThread) {
-        return message.channel.isThread.name;
-    }
-    else if (message.channel.isVoiceBased) {
-        return message.channel.isVoiceBased.name;
-    }
-    else {
-        return "Channel Type Unknown";
-    }
 }
 DISCORD_CLIENT.login(DISCORD_TOKEN);
