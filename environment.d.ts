@@ -14,6 +14,9 @@ declare global {
 			MINECRAFT_SERVER_LOGS_PATH: string;
 			MINECRAFT_CHANNEL_PLAYGROUND: string;
 			MINECRAFT_ROLE_ID: string;
+			GUILD_ID_NOMEDIA: string;
+			NOMEDIA_TRIGGERS: string;
+			NOMEDIA_FUNNY_CAT: string;
 		}
 	}
 }

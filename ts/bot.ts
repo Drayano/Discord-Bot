@@ -11,9 +11,11 @@ import { commandMemes } from "./Commands/memes.js";
 import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
-import { commandMinecraft } from "./Commands/minecraft.js";
 
 import { startMinecraftLogListener } from "./minecraftListener.js";
+
+import * as fs from "fs";
+import * as readline from "readline";
 
 dotenv.config();
 
@@ -24,6 +26,7 @@ const DISCORD_CLIENT: Client = new Client({
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.DirectMessages,
 		GatewayIntentBits.DirectMessageReactions,
+		GatewayIntentBits.MessageContent,
 	],
 
 	partials: [Partials.Channel],
@@ -126,10 +129,6 @@ const commands: CommandInterface[] = [
 			},
 		],
 	},
-	{
-		name: "minecraft",
-		description: "Check the status of the Minecraft Server",
-	},
 ];
 
 const DISCORD_TOKEN: string = process.env.DISCORDJS_BOT_TOKEN;
@@ -144,9 +143,9 @@ const rest: REST = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 
 		await rest.put(
 			// This is for testing purposes
-			// Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
+			Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID),
 			// This is for production
-			Routes.applicationCommands(CLIENT_ID),
+			// Routes.applicationCommands(CLIENT_ID),
 			{ body: commands },
 		);
 
@@ -239,7 +238,7 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction: Interaction) => {
 		commandTranslate(interaction);
 	}
 
-	// translate command
+	// pokedex command
 	else if (commandName === "pokedex") {
 		console.log(
 			`with '${options.get("input")?.value?.toString()}' '${options
@@ -247,11 +246,6 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction: Interaction) => {
 				?.value?.toString()}'`,
 		);
 		commandPokedex(interaction);
-	}
-
-	// minecraft command
-	else if (commandName === "minecraft") {
-		commandMinecraft(interaction);
 	}
 });
 
@@ -276,8 +270,62 @@ DISCORD_CLIENT.on("messageCreate", (message: Message) => {
 	// Don't reply to ourselves or other bots
 	if (message.author.bot) {
 		return;
+	} else if (message.guildId === process.env.GUILD_ID_NOMEDIA && message.content !== "") {
+		checkMessageContent(message);
 	}
 });
+
+async function checkMessageContent(message: Message) {
+	try {
+		const filePath = "assets/trigger.txt";
+		const lines = await readAndStoreLines(filePath);
+
+		const matchingIndex = lines.findIndex((line) => line === message.content);
+
+		if (matchingIndex !== -1) {
+			// Match found, perform action based on the matching line number
+			console.log(`Match found at line ${matchingIndex + 1}.`);
+
+			// 0 : first trigger line / 1 : second trigger line etc...
+			switch (matchingIndex) {
+				case 0:
+					message.reply({
+						files: [process.env.NOMEDIA_FUNNY_CAT],
+					});
+					break;
+				default:
+					break;
+			}
+		}
+	} catch (error: any) {
+		console.error("Error:", error.message);
+	}
+}
+
+// Function to read the file and store each line in an array
+function readAndStoreLines(filePath: string): Promise<string[]> {
+	return new Promise((resolve, reject) => {
+		const lines: string[] = [];
+
+		const readStream = readline.createInterface({
+			input: fs.createReadStream(filePath),
+			output: process.stdout,
+			terminal: false,
+		});
+
+		readStream.on("line", (line: string) => {
+			lines.push(line);
+		});
+
+		readStream.on("close", () => {
+			resolve(lines);
+		});
+
+		readStream.on("error", (err: Error) => {
+			reject(err);
+		});
+	});
+}
 
 function handleChannelType(message: Message) {
 	if (message.channel.isTextBased) {

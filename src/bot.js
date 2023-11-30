@@ -9,8 +9,9 @@ import { commandMemes } from "./Commands/memes.js";
 import { commandXkcd } from "./Commands/xkcd.js";
 import { commandTranslate } from "./Commands/translate.js";
 import { commandPokedex } from "./Commands/pokedex.js";
-import { commandMinecraft } from "./Commands/minecraft.js";
 import { startMinecraftLogListener } from "./minecraftListener.js";
+import * as fs from "fs";
+import * as readline from "readline";
 dotenv.config();
 const DISCORD_CLIENT = new Client({
     intents: [
@@ -19,6 +20,7 @@ const DISCORD_CLIENT = new Client({
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.MessageContent,
     ],
     partials: [Partials.Channel],
 });
@@ -107,10 +109,6 @@ const commands = [
             },
         ],
     },
-    {
-        name: "minecraft",
-        description: "Check the status of the Minecraft Server",
-    },
 ];
 const DISCORD_TOKEN = process.env.DISCORDJS_BOT_TOKEN;
 const CLIENT_ID = process.env.DISCORDJS_BOT_ID;
@@ -119,7 +117,7 @@ const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
 (async () => {
     try {
         console.log("Started refreshing application (/) commands.");
-        await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
+        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, PLAYGROUND_GUILD_ID), { body: commands });
         console.log("Successfully reloaded application (/) commands.");
     }
     catch (error) {
@@ -181,9 +179,6 @@ DISCORD_CLIENT.on("interactionCreate", async (interaction) => {
             ?.value?.toString()}'`);
         commandPokedex(interaction);
     }
-    else if (commandName === "minecraft") {
-        commandMinecraft(interaction);
-    }
 });
 DISCORD_CLIENT.on("messageCreate", (message) => {
     if (message.channel.type === ChannelType.DM) {
@@ -197,7 +192,51 @@ DISCORD_CLIENT.on("messageCreate", (message) => {
     if (message.author.bot) {
         return;
     }
+    else if (message.guildId === process.env.GUILD_ID_NOMEDIA && message.content !== "") {
+        checkMessageContent(message);
+    }
 });
+async function checkMessageContent(message) {
+    try {
+        const filePath = "assets/trigger.txt";
+        const lines = await readAndStoreLines(filePath);
+        const matchingIndex = lines.findIndex((line) => line === message.content);
+        if (matchingIndex !== -1) {
+            console.log(`Match found at line ${matchingIndex + 1}.`);
+            switch (matchingIndex) {
+                case 0:
+                    message.reply({
+                        files: [process.env.NOMEDIA_FUNNY_CAT],
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+function readAndStoreLines(filePath) {
+    return new Promise((resolve, reject) => {
+        const lines = [];
+        const readStream = readline.createInterface({
+            input: fs.createReadStream(filePath),
+            output: process.stdout,
+            terminal: false,
+        });
+        readStream.on("line", (line) => {
+            lines.push(line);
+        });
+        readStream.on("close", () => {
+            resolve(lines);
+        });
+        readStream.on("error", (err) => {
+            reject(err);
+        });
+    });
+}
 function handleChannelType(message) {
     if (message.channel.isTextBased) {
         return message.channel.isTextBased.name;
