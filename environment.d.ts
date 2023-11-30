@@ -19,6 +19,7 @@ declare global {
 			GUILD_ID_NOMEDIA: string;
 			NOMEDIA_TRIGGERS: string;
 			NOMEDIA_FUNNY_CAT: string;
+			NOMEDIA_HOMER_GIF: string;
 		}
 	}
 }

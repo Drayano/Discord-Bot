@@ -201,6 +201,9 @@ async function checkMessageContent(message) {
                         files: [process.env.NOMEDIA_FUNNY_CAT],
                     });
                     break;
+                case 1:
+                    message.reply(process.env.NOMEDIA_HOMER_GIF);
+                    break;
                 default:
                     break;
             }
