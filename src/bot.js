@@ -193,7 +193,7 @@ async function checkMessageContent(message) {
     try {
         const filePath = "assets/trigger.txt";
         const lines = await readAndStoreLines(filePath);
-        const matchingIndex = lines.findIndex((line) => line === message.content);
+        const matchingIndex = lines.findIndex((line) => line.toLowerCase() === message.content.toLowerCase());
         if (matchingIndex !== -1) {
             switch (matchingIndex) {
                 case 0:
@@ -206,6 +206,9 @@ async function checkMessageContent(message) {
                     break;
                 case 2:
                     message.reply(process.env.NOMEDIA_RISITAS_GIF);
+                    break;
+                case 3:
+                    message.reply(process.env.NOMEDIA_FRIDAY_GIF);
                     break;
                 default:
                     break;
