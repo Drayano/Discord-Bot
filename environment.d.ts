@@ -22,6 +22,7 @@ declare global {
 			NOMEDIA_HOMER_GIF: string;
 			NOMEDIA_RISITAS_GIF: string;
 			NOMEDIA_FRIDAY_GIF: string;
+			NOMEDIA_CAT_GIF: string;
 		}
 	}
 }
